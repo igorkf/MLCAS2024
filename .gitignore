@@ -1,4 +1,14 @@
-data/*.csv
-output/*.csv
-logs/*.out
+data/**/*.csv
+data/**/*.xlsx
+data/**/*.TIF
+data/**/*.PNG
+data/**/.DS_Store
+data/**/*.md
+data/**/*.zip
+data/**/*.Rhistory
+data/**/*.ipynb
+
 logs/*.txt
+logs/*.out
+
+output/*.csv
