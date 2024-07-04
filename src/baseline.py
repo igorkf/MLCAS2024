@@ -53,5 +53,5 @@ if __name__ == '__main__':
     df_val = df_val.drop(['level_0', 'level_1', 'level_2'], axis=1)
     print('# NA:', df_val['yieldPerAcre'].isna().sum(), '/', len(df_val))
     assert df_val['yieldPerAcre'].isna().sum() == 0
-    df_val.to_csv('output/median_by_groups.csv', index=False)
+    df_val[['yieldPerAcre']].to_csv('output/median_by_groups.csv', index=False)
     
