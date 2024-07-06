@@ -6,10 +6,12 @@ import numpy as np
 
 if __name__ == '__main__':
     PATH_TRAIN = Path('data/train/2022/DataPublication_final/GroundTruth')
+    PATH_TRAIN_2023 = Path('data/train/2023/DataPublication_final/GroundTruth')
     PATH_VAL = Path('data/validation/2023/GroundTruth')
     df_val = pd.read_csv(PATH_VAL / 'val_HIPS_HYBRIDS_2023_V2.3.csv').drop('yieldPerAcre', axis=1)
     df_train = pd.read_csv(PATH_TRAIN / 'HYBRID_HIPS_V3.5_ALLPLOTS.csv')
-    df_train = df_train[df_train['location'].isin(df_val['location'])].reset_index(drop=True)
+    # df_train = df_train[df_train['location'].isin(df_val['location'])].reset_index(drop=True)
+    df_train_2023 = pd.read_csv(PATH_TRAIN_2023 / 'train_HIPS_HYBRIDS_2023_V2.3.csv').rename(columns={'yieldPerAcre': 'ytrue'})
 
     geno_train = set(df_train['genotype'])
     print('# unique genotypes in train:', len(geno_train))
@@ -24,6 +26,7 @@ if __name__ == '__main__':
         .median()
         .rename('level_0')
     )
+    df_train_2023 = df_train_2023.merge(median_per_group, on=grouping_cols, how='left')
     df_val = df_val.merge(median_per_group, on=grouping_cols, how='left')
     print('# NA:', df_val['level_0'].isna().sum(), '/', len(df_val))
     
@@ -34,6 +37,7 @@ if __name__ == '__main__':
         .median()
         .rename('level_1')
     )
+    df_train_2023 = df_train_2023.merge(median_per_group, on=grouping_cols, how='left')
     df_val = df_val.merge(median_per_group, on=grouping_cols, how='left')
     print('# NA:', df_val['level_1'].isna().sum(), '/', len(df_val))
 
@@ -44,9 +48,18 @@ if __name__ == '__main__':
         .median()
         .rename('level_2')
     )
+    df_train_2023 = df_train_2023.merge(median_per_group, on=grouping_cols, how='left')
     df_val = df_val.merge(median_per_group, on=grouping_cols, how='left')
     print('# NA:', df_val['level_2'].isna().sum(), '/', len(df_val))
 
+    # validate on training (2023)
+    df_train_2023['yieldPerAcre'] = pd.NA
+    df_train_2023['yieldPerAcre'] = np.where(df_train_2023['level_0'].notna(), df_train_2023['level_0'], df_train_2023['level_1'])
+    df_train_2023['yieldPerAcre'] = df_train_2023['yieldPerAcre'].fillna(df_train_2023['level_2']).round(2)
+    rmse = ((df_train_2023['ytrue'] - df_train_2023['yieldPerAcre']) ** 2).mean() ** 0.5
+    print('RMSE:', round(rmse, 3), '\n')
+
+    # prediction
     df_val['yieldPerAcre'] = pd.NA
     df_val['yieldPerAcre'] = np.where(df_val['level_0'].notna(), df_val['level_0'], df_val['level_1'])
     df_val['yieldPerAcre'] = df_val['yieldPerAcre'].fillna(df_val['level_2']).round(2)
