@@ -1,3 +1,6 @@
+.Rhistory
+*.Rproj
+
 data/**/*.csv
 data/**/*.xlsx
 data/**/*.TIF
@@ -14,3 +17,4 @@ logs/*.out
 output/*.csv
 
 notebooks/*.ipynb
+.Rproj.user
