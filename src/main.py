@@ -25,17 +25,29 @@ if __name__ == "__main__":
     )
     df_sub = df_test.copy()
 
-    # read satellite data and merge to field data
+    # read BLUPS and merge
+    blups = pd.read_csv("output/blups.csv").iloc[:, :3]
+    blups.columns = ["genotype", "blup", "blup_stderror"]
+    blups["genotype"] = blups["genotype"].str.replace("genotype_", "")
+    df_train = df_train.merge(blups, on="genotype", how="left")
+    df_test = df_test.merge(blups, on="genotype", how="left")
+    BLUP_COLS = [
+        "blup", 
+        # "blup_stderror"
+    ]
+
+    # read satellite data and merge
     df_train_sat_2022 = pd.read_csv("output/satellite_train_2022.csv")
     df_train_sat_2023 = pd.read_csv("output/satellite_train_2023.csv")
     df_train_sat = pd.concat([df_train_sat_2022, df_train_sat_2023], ignore_index=True)
     df_train = df_train.merge(df_train_sat, on=DESIGN_COLS, how="left")
     df_test_sat = pd.read_csv("output/satellite_validation_2023.csv")
     df_test = df_test.merge(df_test_sat, on=DESIGN_COLS, how="left")
+    SAT_COLS = df_train_sat.filter(regex="TP1|TP2|TP3", axis=1).columns.tolist()
 
-    # add location
+    # categorical columns
     CAT_COLS = [
-        # "location",
+        "location",
         "nitrogenTreatment"
     ]
     ohe = OneHotEncoder(sparse_output=False)
@@ -49,12 +61,10 @@ if __name__ == "__main__":
     df_test = pd.concat([df_test_cat, df_test], axis=1)
     CAT_COLS = df_train_cat.columns.tolist()
 
-    # keep only full non-na periods shared among different datasets
-    SAT_COLS = df_train_sat.filter(regex="TP1|TP2|TP3", axis=1).columns.tolist()
-
     FEATURES = [
-        *CAT_COLS,
-        *SAT_COLS,
+        # *CAT_COLS,
+        # *SAT_COLS,
+        *BLUP_COLS,
     ]
 
     # split
@@ -80,7 +90,7 @@ if __name__ == "__main__":
         # xtest = df_test.merge(xtest_clim, on="location")[clim_cols]
 
         # fit
-        model = RandomForestRegressor(random_state=42)
+        model = RandomForestRegressor(random_state=42, max_depth=3)
         model.fit(xtrain, ytrain)
 
         # evaluate
@@ -91,7 +101,6 @@ if __name__ == "__main__":
 
         # predict
         df_sub[f"fold{fold}"] = model.predict(xtest)
-        # df_test.to_csv("output/submission.csv", index=False)
 
     # score
     print("-" * 20)

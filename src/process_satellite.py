@@ -50,6 +50,7 @@ if __name__ == "__main__":
             # re = src.read(5).astype(float)
             # db = src.read(6).astype(float)
             NDVI = (nir - r) / (nir + r)
+            # NDRE = (nir - re) / (nir + re)
             d = {
                 "id": file.stem,
                 "NDVI_mean": NDVI.mean(),
