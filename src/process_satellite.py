@@ -21,13 +21,6 @@ def create_keys(df):
     return df
 
 
-def pivot(df):
-    df = df.pivot(index=['location', 'experiment', 'range', 'row'], columns=['tp'])
-    df.columns = [f'{x[0]}_{x[1]}' for x in df.columns]
-    df = df.reset_index()
-    return df
-
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--data", choices={"train", "validation"}, required=True)
@@ -57,9 +50,10 @@ if __name__ == "__main__":
                 "NDVI_median": np.nanpercentile(np.ma.filled(NDVI, np.nan), 0.5),
                 "NDVI_min": NDVI.min(),
                 "NDVI_max": NDVI.max(),
+                "NDVI_sum": NDVI.sum()
             }
             data.append(d)
     df = pd.DataFrame(data)
     df = create_keys(df)
-    df = pivot(df)
+    # df = pivot(df)
     df.to_csv(f"output/satellite_{args.data}_{args.year}.csv", index=False)
