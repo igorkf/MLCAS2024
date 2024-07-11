@@ -7,6 +7,22 @@ import numpy as np
 from tqdm import tqdm
 
 
+def mask_array(arr):
+    return np.ma.masked_array(arr, arr == 0)
+
+
+def calc_stats(name, index):
+    data = {
+        f"{name}_mean": index.mean(),
+        f"{name}_median": np.nanpercentile(np.ma.filled(index, np.nan), 0.5),
+        f"{name}_min": index.min(),
+        f"{name}_max": index.max(),
+        f"{name}_sum": index.sum(),
+        f"{name}_std": index.std(),
+    }
+    return data
+
+
 def create_keys(df):
     keys = ["location", "tp", "experiment", "range", "row"]
     df_keys = pd.DataFrame(
@@ -34,26 +50,20 @@ if __name__ == "__main__":
         files = np.random.choice(files, size=20)
     data = []
     for file in tqdm(files):
+        d = {}
         with rasterio.open(file) as src:
-            r = src.read(1).astype(float)
-            r = np.ma.masked_array(r, r == 0)  # to disconsider zero pixels
+            r = mask_array(src.read(1).astype(float))
             # g = src.read(2).astype(float)
             # b = src.read(3).astype(float)
-            nir = src.read(4).astype(float)
-            # re = src.read(5).astype(float)
+            nir = mask_array(src.read(4).astype(float))
+            re = mask_array(src.read(5).astype(float))
             # db = src.read(6).astype(float)
             NDVI = (nir - r) / (nir + r)
-            # NDRE = (nir - re) / (nir + re)
-            d = {
-                "id": file.stem,
-                "NDVI_mean": NDVI.mean(),
-                "NDVI_median": np.nanpercentile(np.ma.filled(NDVI, np.nan), 0.5),
-                "NDVI_min": NDVI.min(),
-                "NDVI_max": NDVI.max(),
-                "NDVI_sum": NDVI.sum()
-            }
+            NDRE = (nir - re) / (nir + re)
+            d["id"] = file.stem
+            d.update(calc_stats("NDVI", NDVI))
+            d.update(calc_stats("NDRE", NDRE))
             data.append(d)
     df = pd.DataFrame(data)
     df = create_keys(df)
-    # df = pivot(df)
     df.to_csv(f"output/satellite_{args.data}_{args.year}.csv", index=False)

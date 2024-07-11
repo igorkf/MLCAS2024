@@ -3,9 +3,10 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import KFold
+from sklearn.preprocessing import OneHotEncoder
 from sklearn.ensemble import RandomForestRegressor
 from sklearn import linear_model
-from sklearn.preprocessing import OneHotEncoder
+from sklearn import svm
 
 
 def pivot(df):
@@ -38,6 +39,13 @@ if __name__ == "__main__":
     )
     df_sub = df_test.copy()
 
+    # read G2F individuals
+    # indiv = pd.read_csv("data/individuals.csv", header=None)
+    # indiv.columns = ['genotype']
+    # indiv['genotype'] = indiv['genotype'].str.replace('/', ' X ')
+    # indiv['in_G2F'] = 1
+    # df_train_2022 = df_train_2022.merge(indiv, on='genotype', how='left')
+
     # read BLUPS and merge
     # blups = pd.read_csv("output/blups.csv").iloc[:, :3]
     # blups.columns = ["genotype", "blup", "blup_stderror"]
@@ -58,24 +66,29 @@ if __name__ == "__main__":
     df_test = df_test.merge(df_test_sat, on=DESIGN_COLS, how="left")
 
     # fix timepoints for each location
-    # commented is difference of days between planting date and chosen TP
-    FUNCS = ["median"]
-    for func in FUNCS:
-        new_col = f"NDVI_{func}_fixed"
+    # the comment is the difference of days between planting date and the chosen TP (i.e. 1, 2, or 3)
+    VIS = [
+        "_".join(x.split("_")[:2]) for x in df_train_sat_2022 if x not in DESIGN_COLS
+    ]
+    VIS = [
+        x for x in VIS if "NDVI_max" not in x and "_std" not in x
+    ]  # I guess it has outliers
+    for vi in VIS:
+        new_col = f"{vi}_fixed"
 
         # train2022
-        fix_timepoint(df_train_2022, "Scottsbluff", f"NDVI_{func}_TP3", new_col)  # 79
-        fix_timepoint(df_train_2022, "Lincoln", f"NDVI_{func}_TP2", new_col)  # 75
-        fix_timepoint(df_train_2022, "MOValley", f"NDVI_{func}_TP2", new_col)  # 82
-        fix_timepoint(df_train_2022, "Ames", f"NDVI_{func}_TP3", new_col)  # 79
-        fix_timepoint(df_train_2022, "Crawfordsville", f"NDVI_{func}_TP3", new_col)  # 82
+        fix_timepoint(df_train_2022, "Scottsbluff", f"{vi}_TP3", new_col)  # 79
+        fix_timepoint(df_train_2022, "Lincoln", f"{vi}_TP2", new_col)  # 75
+        fix_timepoint(df_train_2022, "MOValley", f"{vi}_TP2", new_col)  # 82
+        fix_timepoint(df_train_2022, "Ames", f"{vi}_TP3", new_col)  # 79
+        fix_timepoint(df_train_2022, "Crawfordsville", f"{vi}_TP3", new_col)  # 82
 
         # train2023
-        fix_timepoint(df_2023, "Lincoln", f"NDVI_{func}_TP3", new_col)  # 88
-        fix_timepoint(df_2023, "MOValley", f"NDVI_{func}_TP1", new_col)  # 79
+        fix_timepoint(df_2023, "Lincoln", f"{vi}_TP3", new_col)  # 88
+        fix_timepoint(df_2023, "MOValley", f"{vi}_TP1", new_col)  # 79
 
         # val2023
-        fix_timepoint(df_test, "Ames", f"NDVI_{func}_TP2", new_col)  # 72
+        fix_timepoint(df_test, "Ames", f"{vi}_TP2", new_col)  # 72
 
     SAT_COLS = df_train_2022.filter(regex="_fixed", axis=1).columns.tolist()
 
@@ -126,7 +139,7 @@ if __name__ == "__main__":
         xv = pd.concat([xval, yval], axis=1)
         corrv = xv.corr()["yieldPerAcre"].rename("val")
         corr = pd.concat([corrt, corrv], axis=1).sort_values("train")
-        corr['abs_diff'] = (corr['train'] - corr['val']).abs()
+        corr["abs_diff"] = (corr["train"] - corr["val"]).abs()
         print(corr)
 
         # merge climate data
@@ -147,7 +160,10 @@ if __name__ == "__main__":
 
         # fit
         # model = RandomForestRegressor(random_state=42)
+        # model = linear_model.Ridge(random_state=42, alpha=0.01)
         model = linear_model.LinearRegression()
+        # model = svm.SVR(kernel='linear')
+        # model = linear_model.Lasso(random_state=42)
         model.fit(xtrain, ytrain)
 
         # evaluate
@@ -164,6 +180,10 @@ if __name__ == "__main__":
     print("Mean:", np.mean(rmses).round(3))
     print("Std:", np.std(rmses).round(3))
     print("-" * 20)
+
+    # store eveything for git documentation
+    pd.set_option("display.max_columns", 20)
+    pd.set_option("display.width", 150)
 
     # submission
     FOLD_COLS = df_sub.filter(regex="fold[0-9]", axis=1).columns.tolist()
