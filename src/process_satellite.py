@@ -18,7 +18,7 @@ def calc_stats(name, index):
         f"{name}_min": index.min(),
         f"{name}_max": index.max(),
         f"{name}_sum": index.sum(),
-        f"{name}_std": index.std(),
+        # f"{name}_std": index.std(),
     }
     return data
 
@@ -33,7 +33,7 @@ def create_keys(df):
         columns=keys,
     )
     df = pd.concat([df_keys, df], axis=1)
-    df = df.drop("id", axis=1)
+    # df = df.drop("id", axis=1)
     return df
 
 
@@ -53,16 +53,28 @@ if __name__ == "__main__":
         d = {}
         with rasterio.open(file) as src:
             r = mask_array(src.read(1).astype(float))
-            # g = src.read(2).astype(float)
-            # b = src.read(3).astype(float)
+            # g = mask_array(src.read(2).astype(float))
+            b = mask_array(src.read(3).astype(float))
             nir = mask_array(src.read(4).astype(float))
             re = mask_array(src.read(5).astype(float))
             # db = src.read(6).astype(float)
-            NDVI = (nir - r) / (nir + r)
+            nir_minus_r = nir - r
+            nir_plus_r = nir + r
+            NDVI = nir_minus_r / nir_plus_r
             NDRE = (nir - re) / (nir + re)
+            EVI = (2.5 * nir_minus_r) / (1 + nir + (6 * r) - (7.5 * b))
+            # NGRDI = (r - g) / (g + r)
+            # GNDVI = (nir - g) / (nir + g)
+            # GLI = (2 * g - r - b) / (2 * g + r + b)
+            # SAVI = 1.5 * nir_minus_r / (nir_plus_r + 0.5)
+            d["path"] = str(file)
             d["id"] = file.stem
             d.update(calc_stats("NDVI", NDVI))
             d.update(calc_stats("NDRE", NDRE))
+            d.update(calc_stats("EVI", EVI))
+            # d.update(calc_stats("NGRDI", NGRDI))
+            # d.update(calc_stats("GNDVI", GNDVI))
+            # d.update(calc_stats("GLI", GLI))
             data.append(d)
     df = pd.DataFrame(data)
     df = create_keys(df)
