@@ -11,14 +11,15 @@ data/**/*.md
 data/**/*.zip
 data/**/*.Rhistory
 data/**/*.ipynb
-data/*.vcf.gz*
+data/*.vcf*
 
 logs/*.txt
 logs/*.out
 
 output/*.csv
 output/*.txt
-output/*.vcf.gz
+output/*.tsv
+output/*.vcf*
 
 notebooks/*.ipynb
 .Rproj.user
