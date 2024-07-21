@@ -1,7 +1,11 @@
+.Rproj.user
 .Rhistory
 *.Rproj
 .vscode
+__pycache__
 
+data/*.vcf*
+data/*.txt
 data/**/*.csv
 data/**/*.xlsx
 data/**/*.TIF
@@ -11,7 +15,6 @@ data/**/*.md
 data/**/*.zip
 data/**/*.Rhistory
 data/**/*.ipynb
-data/*.vcf*
 
 logs/*.txt
 logs/*.out
@@ -22,4 +25,3 @@ output/*.tsv
 output/*.vcf*
 
 notebooks/*.ipynb
-.Rproj.user
