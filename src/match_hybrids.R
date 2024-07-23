@@ -10,6 +10,13 @@ field2023 <- read.csv("data/train/2023/DataPublication_final/GroundTruth/train_H
 field2023_val <- read.csv("data/validation/2023/GroundTruth/val_HIPS_HYBRIDS_2023_V2.3.csv") %>% 
   select(genotype, yieldPerAcre)
 
+# just to fill non-genotyped hybrids later in the kinship matrix
+all_parents <- bind_rows(field2022, field2023, field2023_val) %>%
+  filter(!is.na(yieldPerAcre)) %>%
+  select(-yieldPerAcre) %>%
+  unique()
+write.csv(all_parents, "output/all_parents.csv", row.names = F)
+
 parents <- bind_rows(field2022, field2023, field2023_val) %>% 
   filter(!is.na(yieldPerAcre)) %>% 
   select(-yieldPerAcre) %>% 
@@ -45,10 +52,11 @@ genos %>%
   write.csv("output/geno_mapping.csv", row.names = F)
 
 # write list
-# genos %>% 
-#   filter(!is.na(Group)) %>% 
-#   select(genotype_fix) %>% 
-#   write.table(
-#     "output/geno_samples.txt", 
-#     row.names = F, col.names = F, quote = F
-#   )
+genos %>% 
+  filter(!is.na(Group)) %>% 
+  select(genotype_fix) %>% 
+  write.table(
+    "output/geno_samples.txt", 
+    row.names = F, col.names = F, quote = F
+  )
+  
