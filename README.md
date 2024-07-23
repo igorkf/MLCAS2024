@@ -34,4 +34,17 @@
     ```
     ./genomics.sh
     ```
-    This might take a while because there are 46 million SNPs.
+    This might take a while because there are around 46 million SNPs from 1515 samples. After filtering, we kept 46 samples and 5523128 SNPs.
+
+4. Configure TASSEL and create hybrids (version used: 5.2.93):
+    ```
+    git clone https://bitbucket.org/tasseladmin/tassel-5-standalone.git
+    ./tassel-5-standalone/run_pipeline.pl -h mdp_genotype.hmp.txt -CreateHybridGenotypesPlugin -hybridFile hybrids.txt -endPlugin -export output
+    ```
+    Guide: https://bytebucket.org/tasseladmin/tassel-5-source/wiki/docs/Tassel5PipelineCLI.pdf
+
+5. Create genomic relationship matrix:
+    ```
+    sbatch 5-kinship.sh
+    ```
+    
