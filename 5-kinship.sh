@@ -6,7 +6,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
-#SBATCH --time=72:00:00
+#SBATCH --time=06:00:00
 
 ## configs 
 module purge
@@ -18,8 +18,8 @@ mkdir -p data src logs output
 scp $SLURM_SUBMIT_DIR/output/geno_mapping.csv output/
 scp $SLURM_SUBMIT_DIR/output/all_parents.csv output/
 scp $SLURM_SUBMIT_DIR/output/hybrids.csv output/
-scp $SLURM_SUBMIT_DIR/output/maize_numeric.hmp.txt output/
 scp $SLURM_SUBMIT_DIR/src/create_kinship.R src/
+scp $SLURM_SUBMIT_DIR/maize_numeric.txt .
 scp $SLURM_SUBMIT_DIR/MLCAS2024.Rproj .
 
 #####################################################

@@ -4,6 +4,10 @@
 .vscode
 __pycache__
 
+# root
+*.txt
+
+# data
 data/*.vcf*
 data/*.txt
 data/**/*.csv
@@ -16,12 +20,15 @@ data/**/*.zip
 data/**/*.Rhistory
 data/**/*.ipynb
 
+# logs
 logs/*.txt
 logs/*.out
 
+# output
 output/*.csv
 output/*.txt
 output/*.tsv
 output/*.vcf*
 
+# notebooks
 notebooks/*.ipynb

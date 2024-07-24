@@ -15,7 +15,6 @@ module purge
 cd /scratch/$SLURM_JOB_ID
 mkdir -p data src logs output
 scp -r $SLURM_SUBMIT_DIR/tassel-5-standalone .
-scp $SLURM_SUBMIT_DIR/output/hybrids.txt output
 scp $SLURM_SUBMIT_DIR/output/merged_m005_snps_pruned.vcf.gz output
 
 #####################################################
@@ -29,10 +28,10 @@ scp $SLURM_SUBMIT_DIR/output/merged_m005_snps_pruned.vcf.gz output
 ./tassel-5-standalone/run_pipeline.pl -Xms10g -Xmx60g -fork1 -vcf output/merged_m005_snps_pruned_sorted.vcf.gz -export output/maize.hmp.txt -exportType Hapmap
 
 # convert Hapmap to numeric
-./tassel-5-standalone/run_pipeline.pl -Xms10g -Xmx60g -h output/maize.hmp.txt -NumericalGenotypePlugin -endPlugin -export output/maize_numeric.hmp.txt -exportType ReferenceProbability
+# ./tassel-5-standalone/run_pipeline.pl -Xms10g -Xmx60g -h output/maize.hmp.txt -NumericalGenotypePlugin -endPlugin -export output/maize_numeric.hmp.txt -exportType ReferenceProbability
 
 #####################################################
 
 ## copy needed output files to /home
-scp -r output/maize_numeric.hmp.txt $SLURM_SUBMIT_DIR/output/
+scp -r output/maize.hmp.txt $SLURM_SUBMIT_DIR/output/
 # scp -r logs/* $SLURM_SUBMIT_DIR/logs/
