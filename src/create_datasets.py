@@ -1,5 +1,4 @@
 import pandas as pd
-from sklearn.model_selection import KFold
 
 from constants import *
 
@@ -22,20 +21,27 @@ def fix_timepoint(df, location, old_col, new_col):
     ]
 
 
+def create_img_id(df, cols):
+    df["img_id"] = df[cols].apply(lambda row: "_".join(row.values.astype(str)), axis=1)
+    return df
+
+
 if __name__ == "__main__":
 
     # read field data
     df_train_2022 = pd.read_csv(
         PATH_TRAIN_2022 / "HYBRID_HIPS_V3.5_ALLPLOTS.csv"
     ).dropna(subset=["yieldPerAcre"])
+    df_train_2022 = create_img_id(df_train_2022, DESIGN_COLS)
     df_train_2022["experiment"] = df_train_2022["experiment"].str.replace(
         "Hyrbrids", "Hybrids"
     )  # fix typo in Scottsbluff
     df_2023 = pd.read_csv(PATH_TRAIN_2023 / "train_HIPS_HYBRIDS_2023_V2.3.csv")
+    df_2023 = create_img_id(df_2023, DESIGN_COLS)
     df_test = pd.read_csv(PATH_VAL / "val_HIPS_HYBRIDS_2023_V2.3.csv").drop(
         "yieldPerAcre", axis=1
     )
-    df_sub = df_test.copy()
+    df_test = create_img_id(df_test, DESIGN_COLS)
 
     # merge satellite data
     df_train_sat_2022 = pivot(pd.read_csv("output/satellite_train_2022.csv"))
@@ -76,7 +82,10 @@ if __name__ == "__main__":
     CAT_COLS = [
         "location",
         "genotype",
-        # "nitrogenTreatment"
+        "experiment",
+        "block",
+        "nitrogenTreatment",
+        "img_id"
     ]
 
     FEATURES = [
@@ -84,33 +93,18 @@ if __name__ == "__main__":
         *SAT_COLS,
     ]
 
-    # split
-    kf = KFold(n_splits=5, shuffle=True, random_state=42)
-    for fold, (tr, _) in enumerate(
-        kf.split(
-            df_train_2022.drop("yieldPerAcre", axis=1), df_train_2022["yieldPerAcre"]
-        )
-    ):
-        print("Fold:", fold)
-        xtrain = df_train_2022.loc[tr, FEATURES]
-        ytrain = df_train_2022.loc[tr, "yieldPerAcre"]
-        xval = df_2023.loc[:, FEATURES]
-        yval = df_2023.loc[:, "yieldPerAcre"]
-        xtest = df_test.loc[:, FEATURES]
+    train = df_train_2022[["yieldPerAcre"] + FEATURES]
+    val = df_2023[["yieldPerAcre"] + FEATURES]
+    test = df_test[FEATURES]
 
-        # checking correlations
-        xt = pd.concat([xtrain, ytrain], axis=1)
-        corrt = xt.drop(CAT_COLS, axis=1).corr()["yieldPerAcre"].rename("train")
-        xv = pd.concat([xval, yval], axis=1)
-        corrv = xv.drop(CAT_COLS, axis=1).corr()["yieldPerAcre"].rename("val")
-        corr = pd.concat([corrt, corrv], axis=1).sort_values("train")
-        corr["abs_diff"] = (corr["train"] - corr["val"]).abs()
-        print(corr)
+    # checking correlations
+    corrt = train.drop(CAT_COLS, axis=1).corr()["yieldPerAcre"].rename("train")
+    corrv = val.drop(CAT_COLS, axis=1).corr()["yieldPerAcre"].rename("val")
+    corr = pd.concat([corrt, corrv], axis=1).sort_values("train")
+    corr["abs_diff"] = (corr["train"] - corr["val"]).abs()
+    print(corr)
 
-        # write
-        xtrain.to_csv(f"output/xtrain_fold{fold}.csv", index=False)
-        ytrain.to_csv(f"output/ytrain_fold{fold}.csv", index=False)
-        if fold == 0:
-            xval.to_csv("output/xval.csv", index=False)
-            yval.to_csv("output/yval.csv", index=False)
-            xtest.to_csv("output/xtest.csv", index=False)
+    # write
+    train.to_csv("output/train.csv", index=False)
+    val.to_csv("output/val.csv", index=False)
+    test.to_csv("output/test.csv", index=False)

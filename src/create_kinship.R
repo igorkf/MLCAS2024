@@ -77,7 +77,3 @@ cat("# non-genotyped hybrids:", k, "from", nrow(parents), "\n")
 # write GRM
 G <- AGHmatrix::Gmatrix(as.matrix(t(hybrids)), maf = 0)
 write.table(G, "output/G.txt", row.names = T)
-
-# read GRM
-# a <- as.matrix(read.table("output/G.txt"))
-# colnames(a) <- rownames(a)
