@@ -7,7 +7,7 @@ pd.set_option("display.max_rows", 1000)
 
 
 def pivot(df):
-    df = df.drop(["path", "id"], axis=1).pivot(
+    df = df.drop(["path", "file"], axis=1).pivot(
         index=["location", "experiment", "range", "row"], columns=["tp"]
     )
     df.columns = [f"{x[0]}_{x[1]}" for x in df.columns]
@@ -33,15 +33,18 @@ if __name__ == "__main__":
         PATH_TRAIN_2022 / "HYBRID_HIPS_V3.5_ALLPLOTS.csv"
     ).dropna(subset=["yieldPerAcre"])
     df_train_2022 = create_img_id(df_train_2022, DESIGN_COLS)
+    df_train_2022["year"] = 2022
     df_train_2022["experiment"] = df_train_2022["experiment"].str.replace(
         "Hyrbrids", "Hybrids"
     )  # fix typo in Scottsbluff
     df_2023 = pd.read_csv(PATH_TRAIN_2023 / "train_HIPS_HYBRIDS_2023_V2.3.csv")
+    df_2023["year"] = 2023
     df_2023 = create_img_id(df_2023, DESIGN_COLS)
     df_test = pd.read_csv(PATH_VAL / "val_HIPS_HYBRIDS_2023_V2.3.csv").drop(
         "yieldPerAcre", axis=1
     )
     df_test = create_img_id(df_test, DESIGN_COLS)
+    df_test["year"] = 2023
 
     # merge satellite data
     df_train_sat_2022 = pivot(pd.read_csv("output/satellite_train_2022.csv"))
@@ -57,7 +60,7 @@ if __name__ == "__main__":
         "_".join(x.split("_")[:2]) for x in df_train_sat_2022 if x not in DESIGN_COLS
     ]
     VIS = [x for x in VIS if "NDVI_max" not in x]  # I guess it has outliers?
-    VIS = [x for x in VIS if "EVI" not in x]
+    # VIS = [x for x in VIS if "EVI" not in x]
     # VIS = [x for x in VIS if "EVI_max" not in x and "EVI_min" not in x and "EVI_median" not in x]
     for vi in VIS:
         new_col = f"{vi}_fixed"
@@ -81,17 +84,16 @@ if __name__ == "__main__":
     # categorical columns
     CAT_COLS = [
         "location",
-        "genotype",
         "experiment",
-        "block",
+        "range",
+        "row",
+        "year",
+        "genotype",
         "nitrogenTreatment",
-        "img_id"
+        "img_id",
     ]
 
-    FEATURES = [
-        *CAT_COLS,
-        *SAT_COLS,
-    ]
+    FEATURES = [*CAT_COLS, *SAT_COLS]
 
     train = df_train_2022[["yieldPerAcre"] + FEATURES]
     val = df_2023[["yieldPerAcre"] + FEATURES]

@@ -28,9 +28,9 @@ scp $SLURM_SUBMIT_DIR/src/process_satellite.py src/
 ## run tasks
 #####################################################
 
-python src/process_satellite.py --data=train --year=2022
-python src/process_satellite.py --data=train --year=2023
-python src/process_satellite.py --data=validation --year=2023
+python -u src/process_satellite.py --data=train --year=2022
+python -u src/process_satellite.py --data=train --year=2023
+python -u src/process_satellite.py --data=validation --year=2023
 
 #####################################################
 

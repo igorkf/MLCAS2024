@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#SBATCH --job-name=folds
-#SBATCH --output=logs/folds_%j.out
+#SBATCH --job-name=datasets
+#SBATCH --output=logs/datasets_%j.out
 #SBATCH --partition=cloud72
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
@@ -24,13 +24,13 @@ scp -r $SLURM_SUBMIT_DIR/data/train/2023/DataPublication_final/GroundTruth/train
 scp -r $SLURM_SUBMIT_DIR/data/validation/2023/GroundTruth/val_HIPS_HYBRIDS_2023_V2.3.csv data/validation/2023/GroundTruth/
 scp -r $SLURM_SUBMIT_DIR/output/satellite*.csv output/
 scp $SLURM_SUBMIT_DIR/src/constants.py src/
-scp $SLURM_SUBMIT_DIR/src/create_folds.py src/
+scp $SLURM_SUBMIT_DIR/src/create_datasets.py src/
 
 #####################################################
 ## run tasks
 #####################################################
 
-python src/create_folds.py
+python src/create_datasets.py
 
 #####################################################
 

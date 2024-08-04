@@ -23,7 +23,8 @@ read_date <- function(path, tab_field) {
     inner_join(tab_field) %>% 
     mutate(sat_1st = as.integer(TP1 - plantingDate)) %>% 
     mutate(sat_2nd = as.integer(TP2 - plantingDate)) %>% 
-    mutate(sat_3rd = as.integer(TP3 - plantingDate))
+    mutate(sat_3rd = as.integer(TP3 - plantingDate)) %>% 
+    mutate(sat_4th = as.integer(TP4 - plantingDate))
   return(tab)
 }
 

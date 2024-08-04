@@ -32,3 +32,6 @@ output/*.vcf*
 
 # notebooks
 notebooks/*.ipynb
+
+# tassel
+tassel-5-standalone
