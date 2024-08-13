@@ -114,15 +114,15 @@ env                   17.5 22.5
 Adding additional levels of Gu in the model matrix of 'parent1' 
 Adding additional levels of Gu in the model matrix of 'parent2' 
 iteration    LogLik     wall    cpu(sec)   restrained
-    1      430.504   19:55:40      4           0
-    2      433.571   19:55:43      7           0
-    3      435.347   19:55:45      9           0
-    4      435.733   19:55:48      12           0
-    5      435.762   19:55:50      14           0
-    6      435.765   19:55:53      17           0
-    7      435.765   19:55:55      19           0
+    1      430.504   20:19:28      2           0
+    2      433.571   20:19:31      5           0
+    3      435.347   20:19:35      9           0
+    4      435.733   20:19:38      12           0
+    5      435.762   20:19:40      14           0
+    6      435.765   20:19:43      17           0
+    7      435.765   20:19:46      20           0
    user  system elapsed 
- 16.392   1.173  20.463 
+ 18.362   1.132  21.784 
 =====================================================================
               Multivariate Linear Mixed Model fit by REML              
 **************************  sommer 4.3  ************************** 
@@ -165,38 +165,42 @@ r: 0.790686
 Adding additional levels of Gu in the model matrix of 'parent1' 
 Adding additional levels of Gu in the model matrix of 'parent2' 
 iteration    LogLik     wall    cpu(sec)   restrained
-    1      444.866   19:55:59      2           0
-    2      447.871   19:56:2      5           0
-    3      449.598   19:56:4      7           0
-    4      449.97   19:56:6      9           0
-    5      449.997   19:56:9      12           0
-    6      450   19:56:11      14           0
-    7      450   19:56:14      17           0
+    1      495.988   20:19:54      6           0
+    2      496.832   20:20:0      12           0
+    3      497.768   20:20:7      19           0
+    4      498.674   20:20:13      25           0
+    5      499.225   20:20:19      31           0
+    6      499.489   20:20:24      36           0
+    7      499.592   20:20:30      42           0
+    8      499.628   20:20:36      48           0
+    9      499.638   20:20:42      54           0
+    10      499.642   20:20:48      60           0
+    11      499.643   20:20:54      66           0
    user  system elapsed 
- 15.717   1.125  18.120 
+ 58.596   2.747  68.090 
 =====================================================================
               Multivariate Linear Mixed Model fit by REML              
 **************************  sommer 4.3  ************************** 
 =====================================================================
         logLik       AIC       BIC Method Converge
-Value 450.0001 -878.0001 -815.6923     NR     TRUE
+Value 499.6426 -981.2853 -927.9329     NR     TRUE
 =====================================================================
 Variance-Covariance components:
                                     VarComp VarCompSE Zratio Constraint
-u:parent1.yieldPerAcre-yieldPerAcre   33.89     16.23  2.088   Positive
-u:parent2.yieldPerAcre-yieldPerAcre   87.54     35.05  2.498   Positive
-units.yieldPerAcre-yieldPerAcre      698.39     21.67 32.230   Positive
+u:parent1.yieldPerAcre-yieldPerAcre   52.72     20.39  2.586   Positive
+u:parent2.yieldPerAcre-yieldPerAcre  419.11    125.98  3.327   Positive
+units.yieldPerAcre-yieldPerAcre      704.18     19.15 36.777   Positive
 =====================================================================
 Fixed effects:
-         Trait                  Effect  Estimate Std.Error t.value
-1 yieldPerAcre             (Intercept)  -294.779   10.7079 -27.529
-2 yieldPerAcre    nitrogenTreatmentLow     9.002    1.6120   5.584
-3 yieldPerAcre nitrogenTreatmentMedium     5.019    1.4504   3.460
-4 yieldPerAcre           commercialyes    31.208   11.4710   2.721
-5 yieldPerAcre         NDVI_mean_fixed -1926.181  158.7148 -12.136
-6 yieldPerAcre       NDVI_median_fixed   130.029   21.5922   6.022
-7 yieldPerAcre          NDVI_sum_fixed    11.065    0.7203  15.361
-8 yieldPerAcre         NDRE_mean_fixed  5889.565  379.5447  15.517
+         Trait            Effect Estimate Std.Error t.value
+1 yieldPerAcre       (Intercept)  -320.62   11.8178 -27.130
+2 yieldPerAcre     commercialyes    55.68   22.6081   2.463
+3 yieldPerAcre   NDVI_mean_fixed -1815.36  137.5879 -13.194
+4 yieldPerAcre NDVI_median_fixed   119.30   18.8912   6.315
+5 yieldPerAcre    NDVI_sum_fixed    10.51    0.6151  17.084
+6 yieldPerAcre   NDRE_mean_fixed  5663.36  315.4112  17.955
+7 yieldPerAcre NDRE_median_fixed  -156.80   48.9174  -3.205
+8 yieldPerAcre    NDRE_max_fixed  -264.52   53.5871  -4.936
    ... please access the object to see more
 =====================================================================
 Groups and observations:
@@ -204,63 +208,8 @@ Groups and observations:
 u:parent1           56
 u:parent2           50
 =====================================================================
-Use the '$' sign to access results and parametersdim X: 643 11 
-dim b: 11 1 
-dim Z ( parent1 ): 643 44 
-dim u ( parent1 ): 44 1 
-dim Z ( parent2 ): 643 31 
-dim u ( parent2 ): 31 1 
-RMSE: 30.71735 
-r: 0.7905867 
-
-Adding additional levels of Gu in the model matrix of 'parent1' 
-Adding additional levels of Gu in the model matrix of 'parent2' 
-iteration    LogLik     wall    cpu(sec)   restrained
-    1      515.229   19:56:21      5           0
-    2      516.235   19:56:27      11           0
-    3      517.279   19:56:32      16           0
-    4      518.273   19:56:38      22           0
-    5      518.879   19:56:43      27           0
-    6      519.165   19:56:48      32           0
-    7      519.275   19:56:54      38           0
-    8      519.311   19:57:0      44           0
-    9      519.321   19:57:6      50           0
-    10      519.325   19:57:20      64           0
-    11      519.325   19:57:31      75           0
-   user  system elapsed 
- 55.093   2.770  77.731 
-=====================================================================
-              Multivariate Linear Mixed Model fit by REML              
-**************************  sommer 4.3  ************************** 
-=====================================================================
-        logLik       AIC       BIC Method Converge
-Value 519.3253 -1016.651 -951.4422     NR     TRUE
-=====================================================================
-Variance-Covariance components:
-                                    VarComp VarCompSE Zratio Constraint
-u:parent1.yieldPerAcre-yieldPerAcre   52.58     20.26  2.595   Positive
-u:parent2.yieldPerAcre-yieldPerAcre  444.84    132.87  3.348   Positive
-units.yieldPerAcre-yieldPerAcre      693.49     18.86 36.762   Positive
-=====================================================================
-Fixed effects:
-         Trait                  Effect  Estimate Std.Error t.value
-1 yieldPerAcre             (Intercept)  -326.758   11.9992 -27.232
-2 yieldPerAcre    nitrogenTreatmentLow     8.694    1.4239   6.106
-3 yieldPerAcre nitrogenTreatmentMedium     6.472    1.2820   5.048
-4 yieldPerAcre           commercialyes    56.302   23.2492   2.422
-5 yieldPerAcre         NDVI_mean_fixed -2064.385  143.5654 -14.379
-6 yieldPerAcre       NDVI_median_fixed   116.352   18.8520   6.172
-7 yieldPerAcre          NDVI_sum_fixed    11.684    0.6455  18.100
-8 yieldPerAcre         NDRE_mean_fixed  6236.928  333.2502  18.715
-   ... please access the object to see more
-=====================================================================
-Groups and observations:
-          yieldPerAcre
-u:parent1           56
-u:parent2           50
-=====================================================================
-Use the '$' sign to access results and parametersdim X: 282 11 
-dim b: 11 1 
+Use the '$' sign to access results and parametersdim X: 282 9 
+dim b: 9 1 
 dim Z ( parent1 ): 282 32 
 dim u ( parent1 ): 32 1 
 dim Z ( parent2 ): 282 25 
@@ -268,19 +217,17 @@ dim u ( parent2 ): 25 1
 overlapping of parent1 and parent2 among 2022 and 2023
 p1: 31 overlapping from total of 46 
 p2: 22 overlapping from total of 31 
-                    Effect     Estimate mod_full$Beta[, 3]
-1              (Intercept)  -294.779441        -326.758191
-2     nitrogenTreatmentLow     9.001999           8.694476
-3  nitrogenTreatmentMedium     5.018780           6.472020
-4            commercialyes    31.207776          56.301520
-5          NDVI_mean_fixed -1926.181073       -2064.385463
-6        NDVI_median_fixed   130.028792         116.352048
-7           NDVI_sum_fixed    11.064830          11.684294
-8          NDRE_mean_fixed  5889.564807        6236.927778
-9        NDRE_median_fixed  -172.964426        -141.661390
-10          NDRE_max_fixed  -265.264839        -242.807684
-11          NDRE_sum_fixed   -25.687582         -27.237141
+             Effect     Estimate mod_full$Beta[, 3]
+1       (Intercept)  -285.881898         -320.62076
+2     commercialyes    31.605919           55.68095
+3   NDVI_mean_fixed -1601.987500        -1815.36419
+4 NDVI_median_fixed   141.281343          119.29804
+5    NDVI_sum_fixed     9.504839           10.50811
+6   NDRE_mean_fixed  5098.136676         5663.36025
+7 NDRE_median_fixed  -204.679901         -156.80224
+8    NDRE_max_fixed  -278.613316         -264.51636
+9    NDRE_sum_fixed   -21.843906          -24.37614
          Min.  1st Qu.   Median     Mean  3rd Qu.     Max.
 2022  1.67000  82.1100 136.4500 121.9023 162.9350 243.9300
 2023 21.67000  88.0600 107.9400 118.3114 136.8400 278.4600
-sub  94.57942 157.0373 176.0537 173.2232 190.2385 241.9684
+sub  94.75766 155.6173 175.3873 172.9468 190.0176 241.4585

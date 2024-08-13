@@ -173,21 +173,21 @@ train %>%
     geom_point()
 
 # commercial + nitrogenTreatment + VIs + p1 + p2
-fixed2 <- update(fixed, ~ nitrogenTreatment + ., data = all_data)
-system.time(
-  mod2 <- mmer(fixed2, random = ~ vsr(parent1, Gu = G1) + vsr(parent2, Gu = G2),
-               rcov = ~ units, data = train)
-)
-summary(mod2)
-yhat2 <- build_prediction(
-  mod2, fixed2, val, "yieldPerAcre", add_p1 = T, add_p2 = T, add_geno = F, add_env = F, verbose = T
-)
-cat("RMSE:", RMSE(val$yieldPerAcre, yhat2), "\n")
-cat("r:", cor(val$yieldPerAcre, yhat2), "\n\n")
-train %>% 
-  mutate(yhat = mod2$fitted) %>% 
-  ggplot(aes(x = yieldPerAcre, y = yhat, color = env_exp)) +
-  geom_point()
+# fixed2 <- update(fixed, ~ nitrogenTreatment + ., data = all_data)
+# system.time(
+#   mod2 <- mmer(fixed2, random = ~ vsr(parent1, Gu = G1) + vsr(parent2, Gu = G2),
+#                rcov = ~ units, data = train)
+# )
+# summary(mod2)
+# yhat2 <- build_prediction(
+#   mod2, fixed2, val, "yieldPerAcre", add_p1 = T, add_p2 = T, add_geno = F, add_env = F, verbose = T
+# )
+# cat("RMSE:", RMSE(val$yieldPerAcre, yhat2), "\n")
+# cat("r:", cor(val$yieldPerAcre, yhat2), "\n\n")
+# train %>% 
+#   mutate(yhat = mod2$fitted) %>% 
+#   ggplot(aes(x = yieldPerAcre, y = yhat, color = env_exp)) +
+#   geom_point()
 
 # commercial + nitrogenTreatment + VIs + genotype
 # system.time(
@@ -205,12 +205,12 @@ train %>%
 # refit with full data
 full <- droplevels(bind_rows(train, val))
 system.time(
-  mod_full <- mmer(fixed2, random = ~ vsr(parent1, Gu = G1) + vsr(parent2, Gu = G2),
+  mod_full <- mmer(fixed, random = ~ vsr(parent1, Gu = G1) + vsr(parent2, Gu = G2),
                    rcov = ~ units, data = full)
 )
 summary(mod_full)
 ypred <- build_prediction(
-  mod_full, fixed2, test, "yieldPerAcre", add_p1 = T, add_p2 = T, add_geno = F, add_env = F, verbose = T
+  mod_full, fixed, test, "yieldPerAcre", add_p1 = T, add_p2 = T, add_geno = F, add_env = F, verbose = T
 )
 
 # overlapping between 2022 and 2023
@@ -223,7 +223,7 @@ inter_p2 <- intersect(train$parent2, val$parent2)
 cat("p2:", length(inter_p2), "overlapping from total of", length(union_p2), "\n")
 
 # check estimates
-df_coef <- cbind(mod2$Beta[, 2:3], mod_full$Beta[, 3])
+df_coef <- cbind(mod1$Beta[, 2:3], mod_full$Beta[, 3])
 df_coef
 
 # predict on sub
