@@ -12,17 +12,15 @@ field2023_val <- read.csv("data/validation/2023/GroundTruth/val_HIPS_HYBRIDS_202
 
 # just to fill non-genotyped hybrids later in the kinship matrix
 all_parents <- bind_rows(field2022, field2023, field2023_val) %>%
-  filter(!is.na(yieldPerAcre)) %>%
   select(-yieldPerAcre) %>%
-  unique()
+  unique() %>% 
+  filter(!is.na(genotype))
 write.csv(all_parents, "output/all_parents.csv", row.names = F)
 
 parents <- bind_rows(field2022, field2023, field2023_val) %>% 
-  filter(!is.na(yieldPerAcre)) %>% 
   select(-yieldPerAcre) %>% 
   mutate(parent1 = str_split_i(genotype, " X ", 1)) %>% 
-  mutate(parent2 = str_split_i(genotype, " X ", 2)) %>% 
-  filter(!is.na(parent2))
+  mutate(parent2 = str_split_i(genotype, " X ", 2))
 
 genos <- bind_rows(
   tibble(genotype = unique(parents$parent1)),
@@ -41,7 +39,8 @@ genos <- bind_rows(
     genotype == "'IOWA I 205'" ~ "I_205",
     TRUE ~ as.character(genotype)
   )) %>% 
-  left_join(tabs1, by = c("genotype_fix" = "ID"))
+  left_join(tabs1, by = c("genotype_fix" = "ID")) %>% 
+  filter(!is.na(genotype))
 
 colSums(is.na(genos))
 colSums(is.na(genos)) / nrow(genos)

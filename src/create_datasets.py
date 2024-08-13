@@ -46,6 +46,26 @@ if __name__ == "__main__":
     df_test = create_img_id(df_test, DESIGN_COLS)
     df_test["year"] = 2023
 
+    # outliers
+    # def sd(x):
+    #     return x.var() ** 0.5
+    # mean_sd = df_train_2022.groupby(["location", "year"])["yieldPerAcre"].agg(
+    #     ["mean", sd]
+    # )
+    # df_train_2022 = df_train_2022.merge(mean_sd, on=["location", "year"])
+    # df_train_2022["mean_3sd"] = df_train_2022["mean"] + 3 * df_train_2022["sd"]
+    # df_train_2022["outlier"] = ~df_train_2022["yieldPerAcre"].between(
+    #     -df_train_2022["mean_3sd"], df_train_2022["mean_3sd"]
+    # )
+    # print("Dropping outliers:")
+    # print(
+    #     df_train_2022[df_train_2022["outlier"]][
+    #         ["location", "yieldPerAcre", "mean", "sd"]
+    #     ]
+    # )
+    # df_train_2022 = df_train_2022[~df_train_2022["outlier"]].reset_index(drop=True)
+    # print()
+
     # merge satellite data
     df_train_sat_2022 = pivot(pd.read_csv("output/satellite_train_2022.csv"))
     df_train_2022 = df_train_2022.merge(df_train_sat_2022, on=DESIGN_COLS, how="left")
@@ -89,7 +109,10 @@ if __name__ == "__main__":
         "row",
         "year",
         "genotype",
+        "irrigationProvided",
         "nitrogenTreatment",
+        "poundsOfNitrogenPerAcre",
+        "plotLength",
         "img_id",
     ]
 

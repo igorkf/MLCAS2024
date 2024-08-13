@@ -32,4 +32,5 @@ Rscript src/create_kinship.R
 
 ## copy needed output files to /home
 scp -r output/G.txt $SLURM_SUBMIT_DIR/output/
+scp -r output/G1G2.txt $SLURM_SUBMIT_DIR/output/
 # scp -r logs/* $SLURM_SUBMIT_DIR/logs/

@@ -4,7 +4,7 @@ library(readxl)
 read_field <- function(path) {
   tab <- read.csv(path) %>% 
     filter(!is.na(plantingDate)) %>%
-    select(location, plantingDate) %>% 
+    dplyr::select(location, plantingDate) %>% 
     unique() %>% 
     group_by(location) %>% 
     filter(plantingDate == min(plantingDate)) %>%  # because Ames has 2 plantingDates (2022-05-22, 2022-05-23)
@@ -18,9 +18,13 @@ read_date <- function(path, tab_field) {
     filter(Image == "Satellite") %>% 
     filter(location != "North Platte") %>% 
     mutate(location = str_replace_all(location, "Missouri Valley", "MOValley")) %>% 
-    select(-Image) %>% 
+    dplyr::select(-Image) %>% 
     pivot_wider(names_from = time, values_from = Date) %>% 
     inner_join(tab_field) %>% 
+    mutate(sat_1st_w = format(TP1, "%V")) %>% 
+    mutate(sat_2nd_w = format(TP2, "%V")) %>% 
+    mutate(sat_3rd_w = format(TP3, "%V")) %>% 
+    mutate(sat_4th_w = format(TP4, "%V")) %>% 
     mutate(sat_1st = as.integer(TP1 - plantingDate)) %>% 
     mutate(sat_2nd = as.integer(TP2 - plantingDate)) %>% 
     mutate(sat_3rd = as.integer(TP3 - plantingDate)) %>% 
