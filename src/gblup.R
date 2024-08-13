@@ -150,7 +150,7 @@ with(all_data, table(env, plotLength))  # only Scottsbluff_2022 used 22.5
 
 # mixed models
 # gxe models: https://cran.r-project.org/web/packages/sommer/vignettes/v4.sommer.gxe.pdf
-fixed <- as.formula(three_quarters_y ~ commercial + NDVI_mean_fixed + NDVI_median_fixed + 
+fixed <- as.formula(yieldPerAcre ~ commercial + NDVI_mean_fixed + NDVI_median_fixed + 
                     NDVI_sum_fixed + NDRE_mean_fixed + NDRE_median_fixed + NDRE_max_fixed + 
                     NDRE_sum_fixed)
 # bc <- boxcox(lm(fixed, data = train))
@@ -163,7 +163,7 @@ system.time(
 )
 summary(mod1)
 yhat1 <- build_prediction(
-  mod1, fixed, val, "three_quarters_y", add_p1 = T, add_p2 = T, add_env = F, add_geno = F, verbose = T
+  mod1, fixed, val, "yieldPerAcre", add_p1 = T, add_p2 = T, add_env = F, add_geno = F, verbose = T
 )
 cat("RMSE:", RMSE(val$yieldPerAcre, yhat1), "\n")
 cat("r:", cor(val$yieldPerAcre, yhat1), "\n\n")
@@ -180,7 +180,7 @@ system.time(
 )
 summary(mod2)
 yhat2 <- build_prediction(
-  mod2, fixed2, val, "three_quarters_y", add_p1 = T, add_p2 = T, add_geno = F, add_env = F, verbose = T
+  mod2, fixed2, val, "yieldPerAcre", add_p1 = T, add_p2 = T, add_geno = F, add_env = F, verbose = T
 )
 cat("RMSE:", RMSE(val$yieldPerAcre, yhat2), "\n")
 cat("r:", cor(val$yieldPerAcre, yhat2), "\n\n")
@@ -210,7 +210,7 @@ system.time(
 )
 summary(mod_full)
 ypred <- build_prediction(
-  mod_full, fixed2, test, "three_quarters_y", add_p1 = T, add_p2 = T, add_geno = F, add_env = F, verbose = T
+  mod_full, fixed2, test, "yieldPerAcre", add_p1 = T, add_p2 = T, add_geno = F, add_env = F, verbose = T
 )
 
 # overlapping between 2022 and 2023
