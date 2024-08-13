@@ -156,14 +156,14 @@ fixed <- as.formula(yieldPerAcre ~ commercial + NDVI_mean_fixed + NDVI_median_fi
 # bc <- boxcox(lm(fixed, data = train))
 # lambda <- bc$x[which.max(bc$y)]
 
-# commercial + VIs + p1 + p2
+# commercial + VIs + genotype
 system.time(
-  mod1 <- mmer(fixed, random = ~ vsr(parent1, Gu = G1) + vsr(parent2, Gu = G2),
+  mod1 <- mmer(fixed, random = ~ vsr(genotype, Gu = Ggeno), # vsr(parent1, Gu = G1) + vsr(parent2, Gu = G2),
                rcov= ~ units, data = train)
 )
 summary(mod1)
 yhat1 <- build_prediction(
-  mod1, fixed, val, "yieldPerAcre", add_p1 = T, add_p2 = T, add_env = F, add_geno = F, verbose = T
+  mod1, fixed, val, "yieldPerAcre", add_p1 = F, add_p2 = F, add_env = F, add_geno = T, verbose = T
 )
 cat("RMSE:", RMSE(val$yieldPerAcre, yhat1), "\n")
 cat("r:", cor(val$yieldPerAcre, yhat1), "\n\n")
@@ -205,12 +205,12 @@ train %>%
 # refit with full data
 full <- droplevels(bind_rows(train, val))
 system.time(
-  mod_full <- mmer(fixed, random = ~ vsr(parent1, Gu = G1) + vsr(parent2, Gu = G2),
+  mod_full <- mmer(fixed, random = ~ vsr(genotype, Gu = Ggeno), # vsr(parent1, Gu = G1) + vsr(parent2, Gu = G2),
                    rcov = ~ units, data = full)
 )
 summary(mod_full)
 ypred <- build_prediction(
-  mod_full, fixed, test, "yieldPerAcre", add_p1 = T, add_p2 = T, add_geno = F, add_env = F, verbose = T
+  mod_full, fixed, test, "yieldPerAcre", add_p1 = F, add_p2 = F, add_env = F, add_geno = T, verbose = T
 )
 
 # overlapping between 2022 and 2023
