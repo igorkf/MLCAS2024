@@ -1,215 +1,126 @@
-  yieldPerAcre      location          experiment            range      
- Min.   :  1.67   Length:2131        Length:2131        Min.   : 2.00  
- 1st Qu.: 82.11   Class :character   Class :character   1st Qu.: 8.00  
- Median :136.45   Mode  :character   Mode  :character   Median :13.00  
- Mean   :121.90                                         Mean   :14.29  
- 3rd Qu.:162.94                                         3rd Qu.:21.00  
- Max.   :243.93                                         Max.   :36.00  
-      row            year        genotype         irrigationProvided
- Min.   : 1.0   Min.   :2022   Length:2131        Min.   : 0.000    
- 1st Qu.: 6.0   1st Qu.:2022   Class :character   1st Qu.: 0.000    
- Median :15.0   Median :2022   Mode  :character   Median : 0.000    
- Mean   :17.1   Mean   :2022                      Mean   : 3.878    
- 3rd Qu.:23.0   3rd Qu.:2022                      3rd Qu.: 0.000    
- Max.   :46.0   Max.   :2022                      Max.   :16.900    
- nitrogenTreatment  poundsOfNitrogenPerAcre   plotLength       img_id         
- Length:2131        Min.   : 75.0           Min.   :17.50   Length:2131       
- Class :character   1st Qu.: 75.0           1st Qu.:17.50   Class :character  
- Mode  :character   Median :150.0           Median :17.50   Mode  :character  
-                    Mean   :153.6           Mean   :18.65                     
-                    3rd Qu.:225.0           3rd Qu.:17.50                     
-                    Max.   :250.0           Max.   :22.50                     
- NDVI_mean_fixed  NDVI_median_fixed NDVI_min_fixed   NDVI_sum_fixed  
- Min.   :0.4561   Min.   :0.2599    Min.   :0.2558   Min.   : 95.04  
- 1st Qu.:0.7097   1st Qu.:0.5521    1st Qu.:0.5373   1st Qu.:148.19  
- Median :0.7806   Median :0.6644    Median :0.6535   Median :162.31  
- Mean   :0.7468   Mean   :0.6390    Mean   :0.6292   Mean   :161.90  
- 3rd Qu.:0.7964   3rd Qu.:0.7380    3rd Qu.:0.7316   3rd Qu.:173.70  
- Max.   :0.8443   Max.   :0.7858    Max.   :0.7733   Max.   :213.58  
- NDRE_mean_fixed  NDRE_median_fixed NDRE_min_fixed   NDRE_max_fixed  
- Min.   :0.2006   Min.   :0.1696    Min.   :0.1692   Min.   :0.2392  
- 1st Qu.:0.2876   1st Qu.:0.2486    1st Qu.:0.2462   1st Qu.:0.3146  
- Median :0.3181   Median :0.2784    Median :0.2751   Median :0.3479  
- Mean   :0.3155   Mean   :0.2812    Mean   :0.2779   Mean   :0.3413  
- 3rd Qu.:0.3478   3rd Qu.:0.3197    3rd Qu.:0.3147   3rd Qu.:0.3688  
- Max.   :0.4086   Max.   :0.3665    Max.   :0.3574   Max.   :0.4318  
- NDRE_sum_fixed  MTCI_mean_fixed  MTCI_median_fixed MTCI_min_fixed  
- Min.   :42.12   Min.   :0.8229   Min.   :0.4877    Min.   :0.4637  
- 1st Qu.:59.96   1st Qu.:1.1948   1st Qu.:0.8640    1st Qu.:0.8225  
- Median :70.30   Median :1.2965   Median :0.9920    Median :0.9513  
- Mean   :68.22   Mean   :1.2956   Mean   :0.9832    Mean   :0.9420  
- 3rd Qu.:75.20   3rd Qu.:1.4077   3rd Qu.:1.1140    3rd Qu.:1.0737  
- Max.   :92.25   Max.   :1.7488   Max.   :1.3783    Max.   :1.3222  
- MTCI_max_fixed  MTCI_sum_fixed  CI_mean_fixed    CI_median_fixed 
- Min.   :1.098   Min.   :164.6   Min.   : 2.018   Min.   :0.9468  
- 1st Qu.:1.502   1st Qu.:253.7   1st Qu.: 3.900   1st Qu.:2.4953  
- Median :1.612   Median :281.9   Median : 5.082   Median :3.4311  
- Mean   :1.631   Mean   :279.4   Mean   : 4.837   Mean   :3.5597  
- 3rd Qu.:1.706   3rd Qu.:303.7   3rd Qu.: 5.605   3rd Qu.:4.7471  
- Max.   :9.725   Max.   :372.5   Max.   :16.347   Max.   :5.9246  
-  CI_min_fixed     CI_max_fixed       CI_sum_fixed      dataset         
- Min.   :0.8978   Min.   :   2.832   Min.   : 423.7   Length:2131       
- 1st Qu.:2.4126   1st Qu.:   6.216   1st Qu.: 829.1   Class :character  
- Median :3.3461   Median :   7.088   Median :1117.7   Mode  :character  
- Mean   :3.4775   Mean   :  17.590   Mean   :1050.2                     
- 3rd Qu.:4.6872   3rd Qu.:   8.958   3rd Qu.:1223.3                     
- Max.   :5.9228   Max.   :2579.000   Max.   :4086.7                     
-     sqrt_y        two_thirds_y    three_quarters_y     log_y       
- Min.   : 1.292   Min.   : 1.408   Min.   : 1.469   Min.   :0.5128  
- 1st Qu.: 9.061   1st Qu.:18.891   1st Qu.:27.277   1st Qu.:4.4081  
- Median :11.681   Median :26.504   Median :39.924   Median :4.9160  
- Mean   :10.633   Mean   :23.829   Mean   :35.762   Mean   :4.6128  
- 3rd Qu.:12.765   3rd Qu.:29.832   3rd Qu.:45.605   3rd Qu.:5.0934  
- Max.   :15.618   Max.   :39.040   Max.   :61.723   Max.   :5.4969  
-     env              env_exp         
- Length:2131        Length:2131       
- Class :character   Class :character  
- Mode  :character   Mode  :character  
-                                      
-                                      
-                                      
-VIs: NDVI_mean_fixed NDVI_median_fixed NDVI_min_fixed NDVI_sum_fixed NDRE_mean_fixed NDRE_median_fixed NDRE_min_fixed NDRE_max_fixed NDRE_sum_fixed 
-# VIs: 9 
-[1] 18 18
-                     irrigationProvided
-env                     0 16.9
-  Ames_2022           487    0
-  Crawfordsville_2022 488    0
-  Lincoln_2022        504    0
-  MOValley_2022       163    0
-  Scottsbluff_2022      0  489
-  Lincoln_2023        419    0
-  MOValley_2023       224    0
-  Ames_2023           282    0
-                     nitrogenTreatment
-env                   High Low Medium
-  Ames_2022            163 163    161
-  Crawfordsville_2022  163 162    163
-  Lincoln_2022         168 168    168
-  MOValley_2022          0   0    163
-  Scottsbluff_2022     156 164    169
-  Lincoln_2023         125 126    168
-  MOValley_2023          0   0    224
-  Ames_2023             82  82    118
-                     poundsOfNitrogenPerAcre
-env                    75 150 160 175 225 250
-  Ames_2022           163 161   0   0   0 163
-  Crawfordsville_2022 162 163   0   0 163   0
-  Lincoln_2022        168 168   0   0 168   0
-  MOValley_2022         0   0   0 163   0   0
-  Scottsbluff_2022    164 169   0   0 156   0
-  Lincoln_2023        126 168   0   0 125   0
-  MOValley_2023         0   0 224   0   0   0
-  Ames_2023            82 118   0   0  82   0
-                     plotLength
-env                   17.5 22.5
-  Ames_2022            487    0
-  Crawfordsville_2022  488    0
-  Lincoln_2022         504    0
-  MOValley_2022        163    0
-  Scottsbluff_2022       0  489
-  Lincoln_2023         419    0
-  MOValley_2023        224    0
-  Ames_2023            282    0
-Adding additional levels of Gu in the model matrix of 'genotype' 
-iteration    LogLik     wall    cpu(sec)   restrained
-    1      438.16   21:0:37      2           0
-    2      438.166   21:0:39      4           0
-    3      438.168   21:0:42      7           0
-    4      438.168   21:0:44      9           0
-   user  system elapsed 
-  8.459   0.558  10.005 
-======================================================================
-              Multivariate Linear Mixed Model fit by REML              
-***************************  sommer 4.3  *************************** 
-======================================================================
-        logLik       AIC       BIC Method Converge
-Value 438.1678 -858.3357 -807.3566     NR     TRUE
-======================================================================
-Variance-Covariance components:
-                                     VarComp VarCompSE Zratio Constraint
-u:genotype.yieldPerAcre-yieldPerAcre   145.4     40.45  3.594   Positive
-units.yieldPerAcre-yieldPerAcre        701.6     21.84 32.120   Positive
-======================================================================
-Fixed effects:
-         Trait            Effect  Estimate Std.Error t.value
-1 yieldPerAcre       (Intercept)  -278.512    9.6737 -28.791
-2 yieldPerAcre     commercialyes    23.694    6.9826   3.393
-3 yieldPerAcre   NDVI_mean_fixed -1619.705  148.0522 -10.940
-4 yieldPerAcre NDVI_median_fixed   141.756   21.4870   6.597
-5 yieldPerAcre    NDVI_sum_fixed     9.588    0.6652  14.412
-6 yieldPerAcre   NDRE_mean_fixed  5140.396  351.1289  14.640
-7 yieldPerAcre NDRE_median_fixed  -205.722   63.2931  -3.250
-8 yieldPerAcre    NDRE_max_fixed  -276.909   85.0869  -3.254
-   ... please access the object to see more
-======================================================================
-Groups and observations:
-           yieldPerAcre
-u:genotype          119
-======================================================================
-Use the '$' sign to access results and parametersdim X: 643 9 
-dim b: 9 1 
-dim Z ( genotype ): 643 114 
-dim u ( genotype ): 114 1 
-RMSE: 30.89389 
-r: 0.7899077 
 
-Adding additional levels of Gu in the model matrix of 'genotype' 
-iteration    LogLik     wall    cpu(sec)   restrained
-    1      486.447   21:0:51      5           0
-    2      491.562   21:0:56      10           0
-    3      492.948   21:1:1      15           0
-    4      493.118   21:1:5      19           0
-    5      493.123   21:1:10      24           0
-    6      493.123   21:1:16      30           0
-   user  system elapsed 
- 27.894   1.237  32.277 
-======================================================================
-              Multivariate Linear Mixed Model fit by REML              
-***************************  sommer 4.3  *************************** 
-======================================================================
-        logLik       AIC      BIC Method Converge
-Value 493.1232 -968.2464 -914.894     NR     TRUE
-======================================================================
-Variance-Covariance components:
-                                     VarComp VarCompSE Zratio Constraint
-u:genotype.yieldPerAcre-yieldPerAcre   315.3     65.31  4.827   Positive
-units.yieldPerAcre-yieldPerAcre        701.6     19.18 36.573   Positive
-======================================================================
+Call:
+lm(formula = form, data = train)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-6.5468 -0.8194  0.1146  0.9125  7.4490 
+
+Coefficients:
+                   Estimate Std. Error t value Pr(>|t|)    
+(Intercept)       -11.96175    0.47907 -24.969  < 2e-16 ***
+NDVI_mean_fixed   -64.83822    7.97143  -8.134 7.00e-16 ***
+NDVI_median_fixed  -3.02692    3.67946  -0.823  0.41080    
+NDVI_min_fixed      8.53460    3.23734   2.636  0.00844 ** 
+NDVI_sum_fixed      0.42938    0.03585  11.977  < 2e-16 ***
+NDRE_mean_fixed   241.46436   19.07831  12.656  < 2e-16 ***
+NDRE_median_fixed -13.42348    8.57120  -1.566  0.11747    
+NDRE_min_fixed     -1.01666    6.95693  -0.146  0.88383    
+NDRE_max_fixed    -20.78246    4.49177  -4.627 3.94e-06 ***
+NDRE_sum_fixed     -0.98158    0.08705 -11.277  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 1.424 on 2121 degrees of freedom
+Multiple R-squared:  0.7719,	Adjusted R-squared:  0.7709 
+F-statistic: 797.5 on 9 and 2121 DF,  p-value: < 2.2e-16
+
+linear model:
+RMSE: 33.51925 
+r: 0.747706 
+Linear mixed model fit by REML ['lmerMod']
+Formula: 
+sqrt(yieldPerAcre) ~ NDVI_mean_fixed + NDVI_median_fixed + NDVI_min_fixed +  
+    NDVI_sum_fixed + NDRE_mean_fixed + NDRE_median_fixed + NDRE_min_fixed +  
+    NDRE_max_fixed + NDRE_sum_fixed + (1 | parent1) + (1 | parent2)
+   Data: train
+
+REML criterion at convergence: 7317.1
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-4.8388 -0.5481  0.0680  0.6541  5.1493 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ parent1  (Intercept) 0.04996  0.2235  
+ parent2  (Intercept) 0.22645  0.4759  
+ Residual             1.76237  1.3275  
+Number of obs: 2131, groups:  parent1, 33; parent2, 22
+
 Fixed effects:
-         Trait            Effect Estimate Std.Error t.value
-1 yieldPerAcre       (Intercept)  -306.27    8.7881 -34.851
-2 yieldPerAcre     commercialyes    43.19    8.3123   5.196
-3 yieldPerAcre   NDVI_mean_fixed -1841.34  137.5805 -13.384
-4 yieldPerAcre NDVI_median_fixed   121.57   18.9062   6.430
-5 yieldPerAcre    NDVI_sum_fixed    10.63    0.6151  17.277
-6 yieldPerAcre   NDRE_mean_fixed  5733.50  315.2859  18.185
-7 yieldPerAcre NDRE_median_fixed  -169.63   48.8923  -3.470
-8 yieldPerAcre    NDRE_max_fixed  -264.52   53.7546  -4.921
-   ... please access the object to see more
-======================================================================
-Groups and observations:
-           yieldPerAcre
-u:genotype          119
-======================================================================
-Use the '$' sign to access results and parametersdim X: 282 9 
-dim b: 9 1 
-dim Z ( genotype ): 282 59 
-dim u ( genotype ): 59 1 
+                   Estimate Std. Error t value
+(Intercept)       -12.33801    0.46504 -26.531
+NDVI_mean_fixed   -57.42522    7.48461  -7.672
+NDVI_median_fixed  -5.17036    3.46188  -1.494
+NDVI_min_fixed     10.83642    3.05420   3.548
+NDVI_sum_fixed      0.40150    0.03361  11.944
+NDRE_mean_fixed   213.15590   17.95309  11.873
+NDRE_median_fixed  -7.39066    8.05843  -0.917
+NDRE_min_fixed     -3.32073    6.53034  -0.509
+NDRE_max_fixed    -13.26534    4.25543  -3.117
+NDRE_sum_fixed     -0.91592    0.08160 -11.225
+
+Correlation of Fixed Effects:
+             (Intr) NDVI_men_fxd NDVI_md_ NDVI_min_fxd NDVI_s_ NDRE_men_fxd
+NDVI_men_fxd -0.098                                                        
+NDVI_mdn_fx   0.121 -0.133                                                 
+NDVI_min_fxd  0.050  0.038       -0.950                                    
+NDVI_sm_fxd  -0.029 -0.982        0.062   -0.012                           
+NDRE_men_fxd  0.081 -0.929        0.060   -0.010        0.935              
+NDRE_mdn_fx  -0.019  0.147       -0.119    0.045       -0.117  -0.277      
+NDRE_min_fxd -0.147 -0.134        0.057   -0.041        0.135   0.202      
+NDRE_mx_fxd  -0.456 -0.125        0.003   -0.002        0.147  -0.153      
+NDRE_sm_fxd   0.076  0.965       -0.039    0.007       -0.995  -0.939      
+             NDRE_md_ NDRE_min_fxd NDRE_mx_
+NDVI_men_fxd                               
+NDVI_mdn_fx                                
+NDVI_min_fxd                               
+NDVI_sm_fxd                                
+NDRE_men_fxd                               
+NDRE_mdn_fx                                
+NDRE_min_fxd -0.919                        
+NDRE_mx_fxd   0.172   -0.013               
+NDRE_sm_fxd   0.129   -0.147       -0.151  
+call full model:
+lmer(formula = sqrt(yieldPerAcre) ~ NDVI_mean_fixed + NDVI_median_fixed + 
+    NDVI_min_fixed + NDVI_sum_fixed + NDRE_mean_fixed + NDRE_median_fixed + 
+    NDRE_min_fixed + NDRE_max_fixed + NDRE_sum_fixed + (1 | parent1) + 
+    (1 | parent2), data = train)
+RMSE: 32.1591 
+r: 0.7740057 
+NDVI_mean_fixed 
+RMSE: 32.1974 
+r: 0.7673704 
+
+NDVI_sum_fixed NDRE_mean_fixed NDRE_sum_fixed 
+RMSE: 32.04062 
+r: 0.7695406 
+
+NDVI_mean_fixed NDVI_sum_fixed NDRE_mean_fixed NDRE_sum_fixed 
+RMSE: 31.26322 
+r: 0.7778351 
+
+NDVI_mean_fixed NDVI_sum_fixed NDRE_mean_fixed NDRE_max_fixed NDRE_sum_fixed 
+RMSE: 31.17891 
+r: 0.7789966 
+
 overlapping of parent1 and parent2 among 2022 and 2023
-p1: 31 overlapping from total of 46 
-p2: 22 overlapping from total of 31 
-             Effect     Estimate mod_full$Beta[, 3]
-1       (Intercept)  -278.512135         -306.27240
-2     commercialyes    23.694345           43.19437
-3   NDVI_mean_fixed -1619.705153        -1841.34294
-4 NDVI_median_fixed   141.755612          121.57297
-5    NDVI_sum_fixed     9.587552           10.62739
-6   NDRE_mean_fixed  5140.396409         5733.50499
-7 NDRE_median_fixed  -205.721544         -169.63333
-8    NDRE_max_fixed  -276.909095         -264.51706
-9    NDRE_sum_fixed   -22.045794          -24.67441
+31 overlapping from total of 46 
+22 overlapping from total of 31 
+call full model:
+lmer(formula = sqrt(yieldPerAcre) ~ NDVI_mean_fixed + NDVI_sum_fixed + 
+    NDRE_mean_fixed + NDRE_max_fixed + NDRE_sum_fixed + (1 | 
+    parent1) + (1 | parent2), data = full)
+
+                     m_2022 m_2022_2023
+(Intercept)     -14.0413038 -14.7320636
+NDVI_mean_fixed -45.6337137 -47.6613049
+NDVI_sum_fixed    0.3756252   0.3797682
+NDRE_mean_fixed 196.4918343 198.1114579
+NDRE_max_fixed  -12.0372990  -8.4997366
+NDRE_sum_fixed   -0.8802638  -0.8903239
          Min.  1st Qu.   Median     Mean  3rd Qu.     Max.
 2022   1.6700  82.1100 136.4500 121.9023 162.9350 243.9300
 2023  21.6700  88.0600 107.9400 118.3114 136.8400 278.4600
-sub  106.2742 157.1622 176.0755 174.4638 190.1628 243.5837
+sub  103.7566 170.0907 192.4038 189.5140 210.4978 282.7735

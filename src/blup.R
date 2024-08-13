@@ -12,7 +12,7 @@ train <- read.csv("output/train.csv")
 train$genotype <- as.factor(train$genotype)
 train$id <- 1:nrow(train)
 
-cats <- c("experiment", "block", "img_id", "genotype", "id")
+cats <- c("experiment", "img_id", "genotype", "id")
 for (cat in cats) {
   train[, cat] <- as.factor(train[, cat])
   val[, cat] <- as.factor(val[, cat])  
@@ -33,10 +33,10 @@ ggplot(train, aes(x = NDVI_mean_fixed, y = yieldPerAcre, color = location)) +
 ggplot(train, aes(x = NDVI_mean_fixed, y = sqrt(yieldPerAcre), color = location)) +
   geom_point()
 
-form <- formula(paste0("yieldPerAcre ~ ", paste0(fixed_eff, collapse = " + ")))
+form <- formula(paste0("sqrt(yieldPerAcre) ~ ", paste0(fixed_eff, collapse = " + ")))
 mod <- lm(form, data = train)
 summary(mod)
-val$yhat_lm <- predict(mod, newdata = val)
+val$yhat_lm <- predict(mod, newdata = val) ^ 2
 cat("linear model:\n")
 cat("RMSE:", RMSE(val$yieldPerAcre, val$yhat_lm), "\n")
 cat("r:", cor(val$yieldPerAcre, val$yhat_lm), "\n")
@@ -55,14 +55,14 @@ train[c("parent1", "parent2")] <- str_split_fixed(train$genotype, " X ", 2)
 val[c("parent1", "parent2")] <- str_split_fixed(val$genotype, " X ", 2)
 form_mm <- formula(
   paste0(
-    "yieldPerAcre ~ ", 
+    "sqrt(yieldPerAcre) ~ ", 
     paste0(fixed_eff, collapse = " + "),
     " + (1 | parent1) + (1 | parent2)"
   )
 )
 mod2 <- lmer(form_mm, data = train)
 summary(mod2)
-val$yhat_mm <- predict(mod2, newdata = val, allow.new.levels = T)
+val$yhat_mm <- predict(mod2, newdata = val, allow.new.levels = T) ^ 2
 cat("call full model:\n")
 summary(mod2)$call
 cat("RMSE:", RMSE(val$yieldPerAcre, val$yhat_mm), "\n")
@@ -76,13 +76,13 @@ best_rmse <- 1000000
 for (vars in combinations) {
   form_mm <- formula(
     paste0(
-      "yieldPerAcre ~ ", 
+      "sqrt(yieldPerAcre) ~ ", 
       paste0(vars, collapse = " + "),
       " + (1 | parent1) + (1 | parent2)"
     )
   )
   mod2 <- lmer(form_mm, data = train)
-  yhat_mm <- predict(mod2, newdata = val, allow.new.levels = T)
+  yhat_mm <- predict(mod2, newdata = val, allow.new.levels = T) ^ 2
   rmse <- RMSE(val$yieldPerAcre, yhat_mm)
   if (rmse < best_rmse) {
     mod_best <- mod2
@@ -92,13 +92,22 @@ for (vars in combinations) {
     cat("r:", cor(val$yieldPerAcre, yhat_mm), "\n\n")
   }
 }
+tab_res <- train %>% 
+  mutate(yhat = fitted(mod_best) ** 2) %>% 
+  mutate(res = resid(mod_best))
+
+# plots
+ggplot(tab_res, aes(x = yhat, y = res, color = location)) +
+  geom_point()
+ggplot(tab_res, aes(x = yieldPerAcre, y = yhat , color = location)) +
+  geom_point()
 
 # overlapping between 2022 and 2023
 cat("overlapping of parent1 and parent2 among 2022 and 2023\n")
-union_p1 <- unique(c(train$parent1, train$parent1))
+union_p1 <- unique(c(train$parent1, val$parent1))
 inter_p1 <- intersect(train$parent1, val$parent1)
 cat(length(inter_p1), "overlapping from total of", length(union_p1), "\n")
-union_p2 <- unique(c(train$parent2, train$parent2))
+union_p2 <- unique(c(train$parent2, val$parent2))
 inter_p2 <- intersect(train$parent2, val$parent2)
 cat(length(inter_p2), "overlapping from total of", length(union_p2), "\n")
 
@@ -116,7 +125,7 @@ test <- read.csv("output/test.csv")
 tab_sub <- read.csv("data/validation/2023/GroundTruth/val_HIPS_HYBRIDS_2023_V2.3.csv")
 stopifnot(all(test$experiment == tab_sub$experiment))
 test[c("parent1", "parent2")] <- str_split_fixed(test$genotype, " X ", 2)
-pred <- predict(mod_full, newdata = test, allow.new.levels = F)  # all levels are known
+pred <- predict(mod_full, newdata = test, allow.new.levels = F) ^ 2  # all levels are known
 
 # compare estimates
 df_coef <- data.frame(
