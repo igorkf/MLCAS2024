@@ -7,12 +7,37 @@ pd.set_option("display.max_rows", 1000)
 
 
 def pivot(df):
-    df = df.drop(["path", "file"], axis=1).pivot(
-        index=["location", "experiment", "range", "row"], columns=["tp"]
-    )
+    if "path" in df.columns and "file" in df.columns:
+        df = df.drop(["path", "file"], axis=1)
+    df = df.pivot(index=["location", "experiment", "range", "row"], columns=["tp"])
     df.columns = [f"{x[0]}_{x[1]}" for x in df.columns]
     df = df.reset_index()
     return df
+
+
+def process_raw_vis(df, vis):
+    funcs = ["mean", "median", "min", "max", "sum"]
+    group = ["location", "tp", "experiment", "range", "row"]
+    for i, vi in enumerate(vis):
+        df_agg = df.groupby(["location", "tp", "experiment"])[vi].agg(["mean", "std"])
+        df_agg["lb"] = df_agg["mean"] - 3 * df_agg["std"]
+        df_agg["ub"] = df_agg["mean"] + 3 * df_agg["std"]
+        df_agg = df_agg.drop(["mean", "std"], axis=1)
+        df_merged = df.merge(df_agg, on=["location", "tp", "experiment"])
+        df_merged[f"{vi}_outlier"] = ~df_merged[vi].between(
+            df_merged["lb"], df_merged["ub"]
+        )
+        df_merged = df_merged[~df_merged[f"{vi}_outlier"]].reset_index(drop=True)
+        df_stats = df.groupby(group)[vi].agg(funcs).reset_index()
+        df_stats = df_stats.rename(columns={fn: f"{vi}_{fn}" for fn in funcs})
+        df_stats_pivot = pivot(df_stats)
+        if i == 0:
+            df_vis = df_stats_pivot.copy()
+        else:
+            df_vis = df_vis.merge(
+                df_stats_pivot, on=["location", "experiment", "range", "row"]
+            )
+    return df_vis
 
 
 def fix_timepoint(df, location, old_col, new_col):
@@ -25,6 +50,8 @@ def create_img_id(df, cols):
     df["img_id"] = df[cols].apply(lambda row: "_".join(row.values.astype(str)), axis=1)
     return df
 
+
+USE_RAW = True
 
 if __name__ == "__main__":
 
@@ -67,11 +94,25 @@ if __name__ == "__main__":
     # print()
 
     # merge satellite data
-    df_train_sat_2022 = pivot(pd.read_csv("output/satellite_train_2022.csv"))
+    if USE_RAW:
+        VIS = ["NDVI", "NDRE", "MTCI", "CI"]
+        sat_2022 = pd.read_csv("output/satellite_train_2022_raw.csv", low_memory=False)
+        sat_2023 = pd.read_csv("output/satellite_train_2023_raw.csv", low_memory=False)
+        sat_val_2023 = pd.read_csv(
+            "output/satellite_validation_2023_raw.csv", low_memory=False
+        )
+        df_train_sat_2022 = process_raw_vis(sat_2022, VIS)
+        df_sat_2023 = process_raw_vis(sat_2023, VIS)
+        df_test_sat = process_raw_vis(sat_val_2023, VIS)
+    else:
+        sat_2022 = pd.read_csv("output/satellite_train_2022.csv")
+        sat_2023 = pd.read_csv("output/satellite_train_2023.csv")
+        sat_val_2023 = pd.read_csv("output/satellite_validation_2023.csv")
+        df_train_sat_2022 = pivot(sat_2022)
+        df_sat_2023 = pivot(sat_2023)
+        df_test_sat = pivot(sat_val_2023)
     df_train_2022 = df_train_2022.merge(df_train_sat_2022, on=DESIGN_COLS, how="left")
-    df_sat_2023 = pivot(pd.read_csv("output/satellite_train_2023.csv"))
     df_2023 = df_2023.merge(df_sat_2023, on=DESIGN_COLS, how="left")
-    df_test_sat = pivot(pd.read_csv("output/satellite_validation_2023.csv"))
     df_test = df_test.merge(df_test_sat, on=DESIGN_COLS, how="left")
 
     # fix timepoints for each location
@@ -82,8 +123,28 @@ if __name__ == "__main__":
     VIS = [x for x in VIS if "NDVI_max" not in x]  # I guess it has outliers?
     # VIS = [x for x in VIS if "EVI" not in x]
     # VIS = [x for x in VIS if "EVI_max" not in x and "EVI_min" not in x and "EVI_median" not in x]
+
+    # first pass
+    # for vi in VIS:
+    #     new_col = f"{vi}_fixed_1"
+
+    #     # train2022
+    #     fix_timepoint(df_train_2022, "Scottsbluff", f"{vi}_TP2", new_col)  # 58
+    #     fix_timepoint(df_train_2022, "Lincoln", f"{vi}_TP1", new_col)  # 56
+    #     fix_timepoint(df_train_2022, "MOValley", f"{vi}_TP1", new_col)  # 74
+    #     fix_timepoint(df_train_2022, "Ames", f"{vi}_TP1", new_col)  # 53
+    #     fix_timepoint(df_train_2022, "Crawfordsville", f"{vi}_TP1", new_col)  # 59
+
+    #     # train2023
+    #     fix_timepoint(df_2023, "Lincoln", f"{vi}_TP2", new_col)  # 60
+    #     fix_timepoint(df_2023, "MOValley", f"{vi}_TP1", new_col)  # 79
+
+    #     # val2023
+    #     fix_timepoint(df_test, "Ames", f"{vi}_TP1", new_col)  # 46
+
+    # second pass
     for vi in VIS:
-        new_col = f"{vi}_fixed"
+        new_col = f"{vi}_fixed_2"
 
         # train2022
         fix_timepoint(df_train_2022, "Scottsbluff", f"{vi}_TP3", new_col)  # 79
@@ -98,6 +159,24 @@ if __name__ == "__main__":
 
         # val2023
         fix_timepoint(df_test, "Ames", f"{vi}_TP2", new_col)  # 72
+
+    # third pass
+    # for vi in VIS:
+    #     new_col = f"{vi}_fixed_3"
+
+    #     # train2022
+    #     fix_timepoint(df_train_2022, "Scottsbluff", f"{vi}_TP4", new_col)  # 90
+    #     fix_timepoint(df_train_2022, "Lincoln", f"{vi}_TP3", new_col)  # 103
+    #     fix_timepoint(df_train_2022, "MOValley", f"{vi}_TP3", new_col)  # 100
+    #     fix_timepoint(df_train_2022, "Ames", f"{vi}_TP4", new_col)  # 100
+    #     fix_timepoint(df_train_2022, "Crawfordsville", f"{vi}_TP3", new_col)  # 82
+
+    #     # train2023
+    #     fix_timepoint(df_2023, "Lincoln", f"{vi}_TP3", new_col)  # 88
+    #     fix_timepoint(df_2023, "MOValley", f"{vi}_TP2", new_col)  # 108
+
+    #     # val2023
+    #     fix_timepoint(df_test, "Ames", f"{vi}_TP3", new_col)  # 103
 
     SAT_COLS = df_train_2022.filter(regex="_fixed", axis=1).columns.tolist()
 

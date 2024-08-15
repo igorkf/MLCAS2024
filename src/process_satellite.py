@@ -41,6 +41,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--data", choices={"train", "validation"}, required=True)
     parser.add_argument("--year", choices={"2022", "2023"}, required=True)
+    parser.add_argument("--aggregate", action="store_true", default=False)
     parser.add_argument("--debug", action="store_true", default=False)
     args = parser.parse_args()
     PATH = Path(f"data/{args.data}/{args.year}")
@@ -70,17 +71,32 @@ if __name__ == "__main__":
             # GNDVI = (nir - g) / (nir + g)
             # GLI = (2 * g - r - b) / (2 * g + r + b)
             # SAVI = 1.5 * nir_minus_r / (nir_plus_r + 0.5)
+            if args.aggregate:
+                d.update(calc_stats("NDVI", NDVI))
+                d.update(calc_stats("NDRE", NDRE))
+                d.update(calc_stats("MTCI", MTCI))
+                d.update(calc_stats("CI", CI))
+                # d.update(calc_stats("NGRDI", NGRDI))
+                # d.update(calc_stats("GNDVI", GNDVI))
+                # d.update(calc_stats("GLI", GLI))
+                # d.update(calc_stats("SAVI", SAVI))
+            else:
+                d["NDVI"] = NDVI[~r.mask].data.ravel()
+                d["NDRE"] = NDRE[~r.mask].data.ravel()
+                d["MTCI"] = MTCI[~r.mask].data.ravel()
+                d["CI"] = CI[~r.mask].data.ravel()
             d["path"] = str(file)
             d["file"] = file.stem
-            d.update(calc_stats("NDVI", NDVI))
-            d.update(calc_stats("NDRE", NDRE))
-            d.update(calc_stats("MTCI", MTCI))
-            d.update(calc_stats("CI", CI))
-            # d.update(calc_stats("NGRDI", NGRDI))
-            # d.update(calc_stats("GNDVI", GNDVI))
-            # d.update(calc_stats("GLI", GLI))
-            # d.update(calc_stats("SAVI", SAVI))
             data.append(d)
+
+    vis = ["NDVI", "NDRE", "MTCI", "CI"]
     df = pd.DataFrame(data)
     df = create_keys(df)
-    df.to_csv(f"output/satellite_{args.data}_{args.year}.csv", index=False)
+    if not args.aggregate:
+        df = df.explode(vis, ignore_index=True)
+        df[vis] = df[vis].astype(float)
+        out = f"output/satellite_{args.data}_{args.year}_raw.csv"
+    else:
+        out = f"output/satellite_{args.data}_{args.year}.csv"
+    print(df.isnull().sum() / len(df))
+    df.to_csv(out, index=False)
