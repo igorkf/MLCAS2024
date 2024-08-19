@@ -67,7 +67,7 @@ if __name__ == "__main__":
     df_2023 = pd.read_csv(PATH_TRAIN_2023 / "train_HIPS_HYBRIDS_2023_V2.3.csv")
     df_2023["year"] = 2023
     df_2023 = create_img_id(df_2023, DESIGN_COLS)
-    df_test = pd.read_csv(PATH_VAL / "val_HIPS_HYBRIDS_2023_V2.3.csv").drop(
+    df_test = pd.read_csv(PATH_TEST / "test_HIPS_HYBRIDS_2023_V2.3.csv").drop(
         "yieldPerAcre", axis=1
     )
     df_test = create_img_id(df_test, DESIGN_COLS)
@@ -98,19 +98,19 @@ if __name__ == "__main__":
         VIS = ["NDVI", "NDRE", "MTCI", "CI"]
         sat_2022 = pd.read_csv("output/satellite_train_2022_raw.csv", low_memory=False)
         sat_2023 = pd.read_csv("output/satellite_train_2023_raw.csv", low_memory=False)
-        sat_val_2023 = pd.read_csv(
-            "output/satellite_validation_2023_raw.csv", low_memory=False
+        sat_test_2023 = pd.read_csv(
+            "output/satellite_test_2023_raw.csv", low_memory=False
         )
         df_train_sat_2022 = process_raw_vis(sat_2022, VIS)
         df_sat_2023 = process_raw_vis(sat_2023, VIS)
-        df_test_sat = process_raw_vis(sat_val_2023, VIS)
+        df_test_sat = process_raw_vis(sat_test_2023, VIS)
     else:
         sat_2022 = pd.read_csv("output/satellite_train_2022.csv")
         sat_2023 = pd.read_csv("output/satellite_train_2023.csv")
-        sat_val_2023 = pd.read_csv("output/satellite_validation_2023.csv")
+        sat_test_2023 = pd.read_csv("output/satellite_test_2023_raw.csv")
         df_train_sat_2022 = pivot(sat_2022)
         df_sat_2023 = pivot(sat_2023)
-        df_test_sat = pivot(sat_val_2023)
+        df_test_sat = pivot(sat_test_2023)
     df_train_2022 = df_train_2022.merge(df_train_sat_2022, on=DESIGN_COLS, how="left")
     df_2023 = df_2023.merge(df_sat_2023, on=DESIGN_COLS, how="left")
     df_test = df_test.merge(df_test_sat, on=DESIGN_COLS, how="left")
@@ -132,8 +132,8 @@ if __name__ == "__main__":
     #     fix_timepoint(df_train_2022, "Scottsbluff", f"{vi}_TP2", new_col)  # 58
     #     fix_timepoint(df_train_2022, "Lincoln", f"{vi}_TP1", new_col)  # 56
     #     fix_timepoint(df_train_2022, "MOValley", f"{vi}_TP1", new_col)  # 74
-    #     fix_timepoint(df_train_2022, "Ames", f"{vi}_TP1", new_col)  # 53
-    #     fix_timepoint(df_train_2022, "Crawfordsville", f"{vi}_TP1", new_col)  # 59
+    #     fix_timepoint(df_train_2022, "Ames", f"{vi}_TP2", new_col)
+    #     fix_timepoint(df_train_2022, "Crawfordsville", f"{vi}_TP2", new_col)
 
     #     # train2023
     #     fix_timepoint(df_2023, "Lincoln", f"{vi}_TP2", new_col)  # 60
@@ -165,15 +165,15 @@ if __name__ == "__main__":
     #     new_col = f"{vi}_fixed_3"
 
     #     # train2022
-    #     fix_timepoint(df_train_2022, "Scottsbluff", f"{vi}_TP4", new_col)  # 90
-    #     fix_timepoint(df_train_2022, "Lincoln", f"{vi}_TP3", new_col)  # 103
-    #     fix_timepoint(df_train_2022, "MOValley", f"{vi}_TP3", new_col)  # 100
-    #     fix_timepoint(df_train_2022, "Ames", f"{vi}_TP4", new_col)  # 100
-    #     fix_timepoint(df_train_2022, "Crawfordsville", f"{vi}_TP3", new_col)  # 82
+    #     fix_timepoint(df_train_2022, "Scottsbluff", f"{vi}_TP4", new_col)
+    #     fix_timepoint(df_train_2022, "Lincoln", f"{vi}_TP3", new_col)
+    #     fix_timepoint(df_train_2022, "MOValley", f"{vi}_TP3", new_col)
+    #     fix_timepoint(df_train_2022, "Ames", f"{vi}_TP4", new_col)
+    #     fix_timepoint(df_train_2022, "Crawfordsville", f"{vi}_TP4", new_col)
 
     #     # train2023
-    #     fix_timepoint(df_2023, "Lincoln", f"{vi}_TP3", new_col)  # 88
-    #     fix_timepoint(df_2023, "MOValley", f"{vi}_TP2", new_col)  # 108
+    #     fix_timepoint(df_2023, "Lincoln", f"{vi}_TP3", new_col)  # no TP4 available!
+    #     fix_timepoint(df_2023, "MOValley", f"{vi}_TP2", new_col)
 
     #     # val2023
     #     fix_timepoint(df_test, "Ames", f"{vi}_TP3", new_col)  # 103
