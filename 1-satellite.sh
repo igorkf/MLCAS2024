@@ -19,9 +19,11 @@ mkdir -p data src logs output
 mkdir -p data/train/2022/DataPublication_final/Satellite
 mkdir -p data/train/2023/DataPublication_final/Satellite
 mkdir -p data/validation/2023/Satellite
+mkdir -p data/test/Test/Test/Satellite
 scp -r $SLURM_SUBMIT_DIR/data/train/2022/DataPublication_final/Satellite data/train/2022/DataPublication_final
 scp -r $SLURM_SUBMIT_DIR/data/train/2023/DataPublication_final/Satellite data/train/2023/DataPublication_final
 scp -r $SLURM_SUBMIT_DIR/data/validation/2023/Satellite data/validation/2023
+scp -r $SLURM_SUBMIT_DIR/data/test/Test/Test/Satellite data/test/Test/Test/Satellite
 scp $SLURM_SUBMIT_DIR/src/process_satellite.py src/
 
 #####################################################
@@ -31,9 +33,9 @@ scp $SLURM_SUBMIT_DIR/src/process_satellite.py src/
 python -u src/process_satellite.py --data=train --year=2022
 python -u src/process_satellite.py --data=train --year=2023
 python -u src/process_satellite.py --data=validation --year=2023
+python -u src/process_satellite.py --data=test --year=2023
 
 #####################################################
 
 ## copy needed output files to /home
 scp -r output/* $SLURM_SUBMIT_DIR/output/
-# scp -r logs/* $SLURM_SUBMIT_DIR/logs/

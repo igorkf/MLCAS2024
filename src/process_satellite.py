@@ -39,12 +39,15 @@ def create_keys(df):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data", choices={"train", "validation"}, required=True)
+    parser.add_argument("--data", choices={"train", "validation", "test"}, required=True)
     parser.add_argument("--year", choices={"2022", "2023"}, required=True)
     parser.add_argument("--aggregate", action="store_true", default=False)
     parser.add_argument("--debug", action="store_true", default=False)
     args = parser.parse_args()
-    PATH = Path(f"data/{args.data}/{args.year}")
+    if args.data == "test":
+        PATH = Path(f"data/test/Test/Test")
+    else:
+        PATH = Path(f"data/{args.data}/{args.year}")
     files = list(PATH.rglob("*.TIF"))
     if args.debug:
         np.random.seed(42)
