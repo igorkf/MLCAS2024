@@ -1,3 +1,22 @@
+WARNING: ignoring environment value of R_HOME
+── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.0
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.0
+✔ purrr     1.0.1     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+Loading required package: Matrix
+
+Attaching package: ‘Matrix’
+
+The following objects are masked from ‘package:tidyr’:
+
+    expand, pack, unpack
+
 
 Call:
 lm(formula = form, data = train)
@@ -164,7 +183,7 @@ NDVI_sum_fixed_2        9.323674    10.05888
 NDRE_mean_fixed_2    4633.564005  5137.72655
 NDRE_max_fixed_2     -104.522623  -108.04251
 NDRE_sum_fixed_2      -21.360870   -23.29438
-        Min.  1st Qu.  Median     Mean  3rd Qu.     Max.
-2022  1.6700  82.1100 136.450 121.9023 162.9350 243.9300
-2023 21.6700  88.0600 107.940 118.3114 136.8400 278.4600
-sub  91.2571 151.1077 171.173 167.5321 184.6469 238.8206
+         Min.  1st Qu.   Median     Mean  3rd Qu.     Max.
+2022  1.67000  82.1100 136.4500 121.9023 162.9350 243.9300
+2023 21.67000  88.0600 107.9400 118.3114 136.8400 278.4600
+sub  11.38676 147.2054 167.9741 162.1511 181.3789 223.8216

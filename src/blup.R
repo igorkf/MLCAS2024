@@ -6,20 +6,18 @@ RMSE <- function(y, ypred) {
 }
 
 train <- read.csv("output/train.csv")
-train$id <- 1:nrow(train)
 train[c("parent1", "parent2")] <- str_split_fixed(train$genotype, " X ", 2)
-train$commercial <- ifelse(grepl(" X ", train$genotype), "no", "yes")
+# train$commercial <- ifelse(grepl(" X ", train$genotype), "no", "yes")
 
 val <- read.csv("output/val.csv")
-val$id <- 1:nrow(val)
 val[c("parent1", "parent2")] <- str_split_fixed(val$genotype, " X ", 2)
-val$commercial <- ifelse(grepl(" X ", val$genotype), "no", "yes")
+# val$commercial <- ifelse(grepl(" X ", val$genotype), "no", "yes")
 
 test <- read.csv("output/test.csv")
 test[c("parent1", "parent2")] <- str_split_fixed(test$genotype, " X ", 2)
-test$commercial <- ifelse(grepl(" X ", test$genotype), "no", "yes")
+# test$commercial <- ifelse(grepl(" X ", test$genotype), "no", "yes")
 
-cats <- c("experiment", "img_id", "genotype", "commercial")
+cats <- c("experiment", "img_id", "genotype", "parent1", "parent2")
 for (cat in cats) {
   train[, cat] <- as.factor(train[, cat])
   val[, cat] <- as.factor(val[, cat])  
@@ -28,11 +26,13 @@ for (cat in cats) {
 
 # first model
 vis <- c(
-  colnames(train)[grep("NDVI_", colnames(train))],
-  colnames(train)[grep("NDRE_", colnames(train))]
+  colnames(train)[grep("^NDVI_", colnames(train))],
+  colnames(train)[grep("^NDRE_", colnames(train))]
+  # colnames(train)[grep("^MTMCI", colnames(train))],
+  # colnames(train)[grep("^CI_", colnames(train))],
 )
 fixed_eff <- c(
-  "commercial",
+  # "commercial",
   vis
 )
 
@@ -80,7 +80,6 @@ combinations <- unlist(lapply(1:length(vis), function(n) {
 }), recursive = FALSE)
 best_rmse <- 1000000
 for (vars in combinations) {
-  vars <- c("commercial", vars)
   form_mm <- formula(
     paste0(
       "yieldPerAcre ~ ", 
@@ -128,9 +127,9 @@ summary(mod_full)$call
 cat("\n")
                           
 # predict on sub
-tab_sub <- read.csv("data/validation/2023/GroundTruth/val_HIPS_HYBRIDS_2023_V2.3.csv")
+tab_sub <- read.csv("data/test/Test/Test/GroundTruth/test_HIPS_HYBRIDS_2023_V2.3.csv")
 stopifnot(all(test$experiment == tab_sub$experiment))
-pred <- predict(mod_full, newdata = test, allow.new.levels = F)  # all levels are known
+pred <- predict(mod_full, newdata = test, allow.new.levels = T)  # just one line unknown (ND203)
 
 # compare estimates
 df_coef <- data.frame(
