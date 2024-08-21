@@ -24,6 +24,7 @@ data/**/*.ipynb
 # logs
 logs/*.txt
 logs/*.out
+catboost_info
 
 # output
 output/*.csv
