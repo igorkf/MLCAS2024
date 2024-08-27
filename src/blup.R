@@ -44,15 +44,14 @@ fixed_eff <- c(
   # "commercial",
   # "location",
   "nitrogenTreatment",
-  vis,
-  "NDVI_mean_fixed_2:NDRE_mean_fixed_2",
-  "NDVI_sum_fixed_2:NDRE_sum_fixed_2"
+  vis
 )
 
 # ggplot(train, aes(x = NDVI_mean_fixed, y = yieldPerAcre, color = location)) +
 #   geom_point()
 # ggplot(train, aes(x = NDVI_mean_fixed, y = sqrt(yieldPerAcre), color = location)) +
 #   geom_point()
+
 
 form <- formula(paste0("yieldPerAcre ~ ", paste0(fixed_eff, collapse = " + ")))
 mod <- lm(form, data = train)
