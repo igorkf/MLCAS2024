@@ -7,17 +7,26 @@ RMSE <- function(y, ypred) {
 
 train <- read.csv("output/train.csv")
 train[c("parent1", "parent2")] <- str_split_fixed(train$genotype, " X ", 2)
+train$env <- interaction(train$location, train$year, sep = "_")
+train$C <- train$range
+train$R <- train$row
 # train$commercial <- ifelse(grepl(" X ", train$genotype), "no", "yes")
 
 val <- read.csv("output/val.csv")
 val[c("parent1", "parent2")] <- str_split_fixed(val$genotype, " X ", 2)
+val$env <- interaction(val$location, val$year, sep = "_")
+val$C <- val$range
+val$R <- val$row
 # val$commercial <- ifelse(grepl(" X ", val$genotype), "no", "yes")
 
 test <- read.csv("output/test.csv")
 test[c("parent1", "parent2")] <- str_split_fixed(test$genotype, " X ", 2)
+test$env <- interaction(test$location, test$year, sep = "_")
+test$C <- test$range
+test$R <- test$row
 # test$commercial <- ifelse(grepl(" X ", test$genotype), "no", "yes")
 
-cats <- c("experiment", "img_id", "genotype", "parent1", "parent2")
+cats <- c("experiment", "img_id", "genotype", "parent1", "parent2", "location", "env", "C", "R", "nitrogenTreatment")
 for (cat in cats) {
   train[, cat] <- as.factor(train[, cat])
   val[, cat] <- as.factor(val[, cat])  
@@ -33,7 +42,11 @@ vis <- c(
 )
 fixed_eff <- c(
   # "commercial",
-  vis
+  # "location",
+  "nitrogenTreatment",
+  vis,
+  "NDVI_mean_fixed_2:NDRE_mean_fixed_2",
+  "NDVI_sum_fixed_2:NDRE_sum_fixed_2"
 )
 
 # ggplot(train, aes(x = NDVI_mean_fixed, y = yieldPerAcre, color = location)) +
@@ -75,8 +88,8 @@ cat("RMSE:", RMSE(val$yieldPerAcre, val$yhat_mm), "\n")
 cat("r:", cor(val$yieldPerAcre, val$yhat_mm), "\n")
 
 # all possible combinations
-combinations <- unlist(lapply(1:length(vis), function(n) {
-  combn(vis, n, simplify = FALSE)
+combinations <- unlist(lapply(1:length(fixed_eff), function(n) {
+  combn(fixed_eff, n, simplify = FALSE)
 }), recursive = FALSE)
 best_rmse <- 1000000
 for (vars in combinations) {
@@ -108,6 +121,61 @@ ggplot(tab_res, aes(x = yhat, y = res, color = location)) +
 ggplot(tab_res, aes(x = yieldPerAcre, y = yhat , color = location)) +
   geom_point()
 
+# m1 <- lme(
+#   fixed = yieldPerAcre ~ NDVI_mean_fixed_2 + NDVI_median_fixed_2 + NDVI_min_fixed_2 + NDVI_sum_fixed_2 + NDRE_mean_fixed_2 + NDRE_max_fixed_2 + NDRE_sum_fixed_2,
+#   random = ~ 1 | parent1 / parent2,
+#   correlation = corSymm(form = ~ 1 | parent1 / parent2),
+#   data = train
+# )
+# p1 <- predict(m1, newdata = val, level = 0)
+# p2 <- predict(m1, newdata = val)
+# p <- ifelse(is.na(p2), p1, p2)
+# RMSE(val$yieldPerAcre, p)
+# plot(val$yieldPerAcre, p)
+
+# model for BLUEs
+# https://idahoagstats.github.io/guide-to-field-trial-spatial-analysis/rcbd-r.html#rowcolumn-trends
+# library(SpATS)
+# for (loc in levels(train$location)) {
+#   train_sub <- droplevels(train[train$location == loc, ])
+#   if(length(levels(train_sub$experiment)) > 2) {
+#     # blues <- lmer(yieldPerAcre ~ (1 | experiment), data = train_sub)
+#     # train[train$location == loc, "blues"] <- fitted(blues)
+#     rand <- ~ experiment
+#   } else {
+#     # train[train$location == loc, "blues"] <- train_sub$yieldPerAcre
+#     rand <- NULL
+#   }
+#   blues <- SpATS(
+#     response = "yieldPerAcre",
+#     # fixed = ~ NDVI_mean_fixed_2 + NDVI_median_fixed_2 + NDVI_min_fixed_2 +
+#     #           NDVI_sum_fixed_2 + NDRE_mean_fixed_2 + NDRE_median_fixed_2 +
+#     #           NDRE_min_fixed_2 + NDRE_max_fixed_2 + NDRE_sum_fixed_2,
+#     random = rand,
+#     genotype = "genotype",
+#     spatial = ~ PSANOVA(range, row, nseg = c(10, 20), degree = 3, pord = 2),
+#     data = train_sub
+#   )
+#   train[train$location == loc, "blues"] <- blues$fitted
+#   # blues <- lmer(rand, data = train_sub)
+# }
+# mod_best_adj <- update(mod_best, blues ~ ., data = train)
+# mod_best_adj <- SpATS(
+#   response = "yieldPerAcre",
+#   fixed = ~ NDVI_mean_fixed_2 + NDVI_median_fixed_2 + NDVI_min_fixed_2 +
+#             NDVI_sum_fixed_2 + NDRE_mean_fixed_2 + NDRE_median_fixed_2 +
+#             NDRE_min_fixed_2 + NDRE_max_fixed_2 + NDRE_sum_fixed_2,
+#   random = ~ location,
+#   genotype = "genotype",
+#   genotype.as.random = T,
+#   spatial = ~ PSANOVA(range, row, nseg = c(10, 20), degree = 3, pord = 2),
+#   data = train
+# )
+# yhat_mm2 <- predict(mod_best_adj, newdata = val)$predicted.values
+# cat("RMSE:", RMSE(val$yieldPerAcre, yhat_mm2), "\n")
+# cat("r:", cor(val$yieldPerAcre, yhat_mm2), "\n\n")
+
+
 # overlapping between 2022 and 2023
 cat("overlapping of parent1 and parent2 among 2022 and 2023\n")
 union_p1 <- unique(c(train$parent1, val$parent1))
@@ -136,7 +204,7 @@ df_coef <- data.frame(
   m_2022 = summary(mod_best)$coefficients[, "Estimate"],
   m_2022_2023 = summary(mod_full)$coefficients[, "Estimate"]
 )
-df_coef
+print(df_coef)
 tab_sub$yieldPerAcre <- pred
 
 # compare distributions
