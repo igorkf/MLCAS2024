@@ -32,7 +32,7 @@ scp $SLURM_SUBMIT_DIR/src/create_datasets.py src/
 ## run tasks
 #####################################################
 
-python src/create_datasets.py
+python -u src/create_datasets.py
 
 #####################################################
 
