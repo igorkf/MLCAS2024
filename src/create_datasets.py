@@ -16,20 +16,34 @@ def pivot(df):
 
 
 def process_raw_vis(df, vis):
-    funcs = ["mean", "median", "min", "max", "sum"]
+    def mean(x):
+        return x.mean()
+
+    def median(x):
+        return x.median()
+
+    def q1(x):
+        return x.quantile(0.25)
+
+    def q3(x):
+        return x.quantile(0.75)
+
+    funcs = [mean, median, min, max, sum, q1, q3]
     group = ["location", "tp", "experiment", "range", "row"]
     for i, vi in enumerate(vis):
-        df_agg = df.groupby(["location", "tp", "experiment"])[vi].agg(["mean", "std"])
-        df_agg["lb"] = df_agg["mean"] - 3 * df_agg["std"]
-        df_agg["ub"] = df_agg["mean"] + 3 * df_agg["std"]
-        df_agg = df_agg.drop(["mean", "std"], axis=1)
-        df_merged = df.merge(df_agg, on=["location", "tp", "experiment"])
-        df_merged[f"{vi}_outlier"] = ~df_merged[vi].between(
-            df_merged["lb"], df_merged["ub"]
-        )
-        df_merged = df_merged[~df_merged[f"{vi}_outlier"]].reset_index(drop=True)
+        # df_agg = df.groupby(["location", "tp", "experiment"])[vi].agg(["mean", "std"])
+        # df_agg["lb"] = df_agg["mean"] - 3 * df_agg["std"]
+        # df_agg["ub"] = df_agg["mean"] + 3 * df_agg["std"]
+        # df_agg = df_agg.drop(["mean", "std"], axis=1)
+        # df_merged = df.merge(df_agg, on=["location", "tp", "experiment"])
+        # df_merged[f"{vi}_outlier"] = ~df_merged[vi].between(
+        #     df_merged["lb"], df_merged["ub"]
+        # )
+        # df_merged = df_merged[~df_merged[f"{vi}_outlier"]].reset_index(drop=True)
         df_stats = df.groupby(group)[vi].agg(funcs).reset_index()
-        df_stats = df_stats.rename(columns={fn: f"{vi}_{fn}" for fn in funcs})
+        df_stats = df_stats.rename(
+            columns={fn.__name__: f"{vi}_{fn.__name__}" for fn in funcs}
+        )
         df_stats_pivot = pivot(df_stats)
         if i == 0:
             df_vis = df_stats_pivot.copy()

@@ -23,92 +23,85 @@ lm(formula = form, data = train)
 
 Residuals:
      Min       1Q   Median       3Q      Max 
--101.749  -18.568   -0.124   18.741  136.380 
+-102.199  -18.260   -0.246   18.719  129.609 
 
 Coefficients:
                       Estimate Std. Error t value Pr(>|t|)    
-(Intercept)          -248.3250     9.8978 -25.089  < 2e-16 ***
-NDVI_mean_fixed_2   -2689.1053   217.2445 -12.378  < 2e-16 ***
-NDVI_median_fixed_2   940.7527   157.0848   5.989 2.48e-09 ***
-NDVI_min_fixed_2      193.2395    21.7961   8.866  < 2e-16 ***
-NDVI_sum_fixed_2        9.7180     0.7161  13.570  < 2e-16 ***
-NDRE_mean_fixed_2    4543.7938   512.9660   8.858  < 2e-16 ***
-NDRE_median_fixed_2   610.3818   341.7899   1.786   0.0743 .  
-NDRE_min_fixed_2     -132.8458    61.5201  -2.159   0.0309 *  
-NDRE_max_fixed_2     -242.0065    99.2412  -2.439   0.0148 *  
-NDRE_sum_fixed_2      -22.3791     1.7443 -12.830  < 2e-16 ***
+(Intercept)          -254.1934    10.9948 -23.119  < 2e-16 ***
+NDVI_mean_fixed_2   -3176.3152   292.7657 -10.849  < 2e-16 ***
+NDVI_median_fixed_2   773.8377   180.3827   4.290 1.87e-05 ***
+NDVI_min_fixed_2      224.1668    25.1382   8.917  < 2e-16 ***
+NDVI_sum_fixed_2        9.2899     0.7453  12.465  < 2e-16 ***
+NDVI_q1_fixed_2       230.2996   139.7639   1.648  0.09955 .  
+NDVI_q3_fixed_2       488.0559   176.8154   2.760  0.00583 ** 
+NDRE_mean_fixed_2    4717.5393  1069.1205   4.413 1.07e-05 ***
+NDRE_median_fixed_2   476.1754   362.4093   1.314  0.18902    
+NDRE_min_fixed_2     -141.1830    73.5221  -1.920  0.05496 .  
+NDRE_max_fixed_2     -317.9476   137.7498  -2.308  0.02109 *  
+NDRE_sum_fixed_2      -21.4777     1.8041 -11.905  < 2e-16 ***
+NDRE_q1_fixed_2       -78.1064   434.0979  -0.180  0.85723    
+NDRE_q3_fixed_2       -64.0940   478.4554  -0.134  0.89345    
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-Residual standard error: 28.35 on 2121 degrees of freedom
-Multiple R-squared:  0.7323,	Adjusted R-squared:  0.7311 
-F-statistic: 644.5 on 9 and 2121 DF,  p-value: < 2.2e-16
+Residual standard error: 28.33 on 2117 degrees of freedom
+Multiple R-squared:  0.7333,	Adjusted R-squared:  0.7316 
+F-statistic: 447.7 on 13 and 2117 DF,  p-value: < 2.2e-16
 
 linear model:
-RMSE: 33.30685 
-r: 0.7435012 
+RMSE: 33.78601 
+r: 0.7359463 
 Linear mixed model fit by REML ['lmerMod']
 Formula: 
 yieldPerAcre ~ NDVI_mean_fixed_2 + NDVI_median_fixed_2 + NDVI_min_fixed_2 +  
-    NDVI_sum_fixed_2 + NDRE_mean_fixed_2 + NDRE_median_fixed_2 +  
-    NDRE_min_fixed_2 + NDRE_max_fixed_2 + NDRE_sum_fixed_2 +  
-    (1 | parent1) + (1 | parent2)
+    NDVI_sum_fixed_2 + NDVI_q1_fixed_2 + NDVI_q3_fixed_2 + NDRE_mean_fixed_2 +  
+    NDRE_median_fixed_2 + NDRE_min_fixed_2 + NDRE_max_fixed_2 +  
+    NDRE_sum_fixed_2 + NDRE_q1_fixed_2 + NDRE_q3_fixed_2 + (1 |  
+    parent1) + (1 | parent2)
    Data: train
 
-REML criterion at convergence: 19985.1
+REML criterion at convergence: 19918.2
 
 Scaled residuals: 
     Min      1Q  Median      3Q     Max 
--4.5199 -0.6255  0.0051  0.6704  4.7742 
+-4.6881 -0.6228  0.0075  0.6727  4.5161 
 
 Random effects:
  Groups   Name        Variance Std.Dev.
- parent1  (Intercept)  19.58    4.425  
- parent2  (Intercept)  89.30    9.450  
- Residual             692.74   26.320  
+ parent1  (Intercept)  19.35    4.398  
+ parent2  (Intercept)  93.39    9.664  
+ Residual             688.26   26.235  
 Number of obs: 2131, groups:  parent1, 33; parent2, 22
 
 Fixed effects:
                       Estimate Std. Error t value
-(Intercept)          -259.4936     9.5686 -27.119
-NDVI_mean_fixed_2   -2367.9743   203.9834 -11.609
-NDVI_median_fixed_2   727.3105   147.7910   4.921
-NDVI_min_fixed_2      194.6509    20.5375   9.478
-NDVI_sum_fixed_2        9.3746     0.6684  14.025
-NDRE_mean_fixed_2    4047.8030   479.4415   8.443
-NDRE_median_fixed_2   701.5383   319.2739   2.197
-NDRE_min_fixed_2      -90.2178    57.4314  -1.571
-NDRE_max_fixed_2     -110.3956    93.3823  -1.182
-NDRE_sum_fixed_2      -21.5854     1.6277 -13.262
+(Intercept)          -270.6146    10.6031 -25.522
+NDVI_mean_fixed_2   -2956.5402   272.5407 -10.848
+NDVI_median_fixed_2   565.4364   169.2610   3.341
+NDVI_min_fixed_2      236.9692    23.4918  10.087
+NDVI_sum_fixed_2        8.6342     0.6952  12.419
+NDVI_q1_fixed_2       227.8412   130.5324   1.745
+NDVI_q3_fixed_2       646.1680   165.3093   3.909
+NDRE_mean_fixed_2    4801.4793   997.5554   4.813
+NDRE_median_fixed_2   595.4849   337.5229   1.764
+NDRE_min_fixed_2     -132.2107    68.4871  -1.930
+NDRE_max_fixed_2     -186.7364   129.2242  -1.445
+NDRE_sum_fixed_2      -19.9938     1.6821 -11.886
+NDRE_q1_fixed_2      -292.8197   405.9474  -0.721
+NDRE_q3_fixed_2      -567.6376   447.3267  -1.269
 
-Correlation of Fixed Effects:
-               (Intr) NDVI_men_fxd_2 NDVI_md__2 NDVI_min_fxd_2 NDVI_s__2
-NDVI_men_fxd_2 -0.261                                                   
-NDVI_mdn__2     0.290 -0.693                                            
-NDVI_min_fxd_2  0.580 -0.443          0.360                             
-NDVI_sm_f_2    -0.065 -0.628         -0.111      0.101                  
-NDRE_men_fxd_2  0.081 -0.532          0.169     -0.056          0.582   
-NDRE_mdn__2    -0.076  0.160         -0.357      0.117          0.131   
-NDRE_min_fxd_2 -0.360  0.019         -0.102     -0.249          0.125   
-NDRE_mx_f_2    -0.394 -0.113         -0.038      0.141          0.198   
-NDRE_sm_f_2     0.109  0.611          0.119     -0.050         -0.995   
-               NDRE_men_fxd_2 NDRE_md__2 NDRE_min_fxd_2 NDRE_mx__2
-NDVI_men_fxd_2                                                    
-NDVI_mdn__2                                                       
-NDVI_min_fxd_2                                                    
-NDVI_sm_f_2                                                       
-NDRE_men_fxd_2                                                    
-NDRE_mdn__2    -0.696                                             
-NDRE_min_fxd_2 -0.420          0.472                              
-NDRE_mx_f_2    -0.387          0.438      0.512                   
-NDRE_sm_f_2    -0.562         -0.157     -0.136         -0.215    
+Correlation matrix not shown by default, as p = 14 > 12.
+Use print(x, correlation=TRUE)  or
+    vcov(x)        if you need it
+
 call full model:
 lmer(formula = yieldPerAcre ~ NDVI_mean_fixed_2 + NDVI_median_fixed_2 + 
-    NDVI_min_fixed_2 + NDVI_sum_fixed_2 + NDRE_mean_fixed_2 + 
-    NDRE_median_fixed_2 + NDRE_min_fixed_2 + NDRE_max_fixed_2 + 
-    NDRE_sum_fixed_2 + (1 | parent1) + (1 | parent2), data = train)
-RMSE: 32.05552 
-r: 0.7672804 
+    NDVI_min_fixed_2 + NDVI_sum_fixed_2 + NDVI_q1_fixed_2 + NDVI_q3_fixed_2 + 
+    NDRE_mean_fixed_2 + NDRE_median_fixed_2 + NDRE_min_fixed_2 + 
+    NDRE_max_fixed_2 + NDRE_sum_fixed_2 + NDRE_q1_fixed_2 + NDRE_q3_fixed_2 + 
+    (1 | parent1) + (1 | parent2), data = train)
+RMSE: 32.6565 
+r: 0.7567635 
 NDVI_mean_fixed_2 
 RMSE: 35.09945 
 r: 0.7490328 
@@ -117,73 +110,103 @@ NDVI_median_fixed_2
 RMSE: 33.98584 
 r: 0.75723 
 
-NDVI_mean_fixed_2 NDVI_median_fixed_2 
-RMSE: 33.84619 
-r: 0.7579124 
+NDVI_q1_fixed_2 
+RMSE: 33.04931 
+r: 0.7672314 
 
-NDVI_median_fixed_2 NDRE_max_fixed_2 
-RMSE: 33.75167 
-r: 0.756169 
+NDVI_q1_fixed_2 NDRE_mean_fixed_2 
+RMSE: 32.95556 
+r: 0.7644323 
 
-NDVI_mean_fixed_2 NDVI_median_fixed_2 NDVI_min_fixed_2 
-RMSE: 33.13773 
-r: 0.7602622 
+NDVI_q1_fixed_2 NDRE_max_fixed_2 
+RMSE: 32.8125 
+r: 0.76644 
 
-NDVI_median_fixed_2 NDRE_median_fixed_2 NDRE_max_fixed_2 
-RMSE: 33.07476 
-r: 0.7563279 
+NDVI_q1_fixed_2 NDRE_mean_fixed_2 NDRE_median_fixed_2 
+RMSE: 32.73143 
+r: 0.763569 
 
-NDVI_mean_fixed_2 NDVI_median_fixed_2 NDRE_mean_fixed_2 NDRE_max_fixed_2 
-RMSE: 32.99741 
-r: 0.7575395 
+NDVI_q1_fixed_2 NDRE_max_fixed_2 NDRE_q3_fixed_2 
+RMSE: 32.38024 
+r: 0.7669987 
 
-NDVI_mean_fixed_2 NDVI_median_fixed_2 NDVI_min_fixed_2 NDRE_mean_fixed_2 NDRE_max_fixed_2 
-RMSE: 32.88825 
-r: 0.7582536 
+NDVI_q1_fixed_2 NDRE_median_fixed_2 NDRE_max_fixed_2 NDRE_q3_fixed_2 
+RMSE: 32.24579 
+r: 0.7646667 
 
-NDVI_mean_fixed_2 NDVI_median_fixed_2 NDVI_min_fixed_2 NDRE_median_fixed_2 NDRE_max_fixed_2 
-RMSE: 32.82808 
-r: 0.7575314 
-
-NDVI_mean_fixed_2 NDVI_median_fixed_2 NDVI_sum_fixed_2 NDRE_mean_fixed_2 NDRE_sum_fixed_2 
-RMSE: 32.69717 
-r: 0.7722002 
-
-NDVI_mean_fixed_2 NDVI_sum_fixed_2 NDRE_mean_fixed_2 NDRE_max_fixed_2 NDRE_sum_fixed_2 
-RMSE: 32.38227 
-r: 0.7695189 
+NDVI_mean_fixed_2 NDVI_sum_fixed_2 NDVI_q1_fixed_2 NDRE_mean_fixed_2 NDRE_sum_fixed_2 
+RMSE: 32.19874 
+r: 0.7764294 
 
 NDVI_mean_fixed_2 NDVI_median_fixed_2 NDVI_min_fixed_2 NDVI_sum_fixed_2 NDRE_mean_fixed_2 NDRE_sum_fixed_2 
 RMSE: 31.97943 
 r: 0.7678712 
 
-NDVI_mean_fixed_2 NDVI_median_fixed_2 NDVI_min_fixed_2 NDVI_sum_fixed_2 NDRE_mean_fixed_2 NDRE_median_fixed_2 NDRE_sum_fixed_2 
-RMSE: 31.97607 
-r: 0.7675934 
+NDVI_mean_fixed_2 NDVI_median_fixed_2 NDVI_sum_fixed_2 NDVI_q1_fixed_2 NDRE_mean_fixed_2 NDRE_sum_fixed_2 
+RMSE: 31.96414 
+r: 0.7780862 
+
+NDVI_mean_fixed_2 NDVI_sum_fixed_2 NDVI_q1_fixed_2 NDRE_sum_fixed_2 NDRE_q1_fixed_2 NDRE_q3_fixed_2 
+RMSE: 31.93136 
+r: 0.7776301 
 
 NDVI_mean_fixed_2 NDVI_median_fixed_2 NDVI_min_fixed_2 NDVI_sum_fixed_2 NDRE_mean_fixed_2 NDRE_max_fixed_2 NDRE_sum_fixed_2 
 RMSE: 31.91528 
 r: 0.7679307 
 
+NDVI_mean_fixed_2 NDVI_median_fixed_2 NDVI_sum_fixed_2 NDVI_q1_fixed_2 NDRE_mean_fixed_2 NDRE_max_fixed_2 NDRE_sum_fixed_2 
+RMSE: 31.7799 
+r: 0.7754284 
+
+NDVI_mean_fixed_2 NDVI_median_fixed_2 NDVI_sum_fixed_2 NDVI_q1_fixed_2 NDVI_q3_fixed_2 NDRE_mean_fixed_2 NDRE_max_fixed_2 NDRE_sum_fixed_2 
+RMSE: 31.7751 
+r: 0.7756212 
+
+NDVI_mean_fixed_2 NDVI_median_fixed_2 NDVI_sum_fixed_2 NDVI_q1_fixed_2 NDRE_mean_fixed_2 NDRE_max_fixed_2 NDRE_sum_fixed_2 NDRE_q1_fixed_2 
+RMSE: 31.70765 
+r: 0.7749808 
+
+NDVI_mean_fixed_2 NDVI_median_fixed_2 NDVI_sum_fixed_2 NDVI_q1_fixed_2 NDVI_q3_fixed_2 NDRE_mean_fixed_2 NDRE_max_fixed_2 NDRE_sum_fixed_2 NDRE_q1_fixed_2 
+RMSE: 31.69583 
+r: 0.775264 
+
+NDVI_mean_fixed_2 NDVI_median_fixed_2 NDVI_sum_fixed_2 NDVI_q1_fixed_2 NDVI_q3_fixed_2 NDRE_mean_fixed_2 NDRE_min_fixed_2 NDRE_max_fixed_2 NDRE_sum_fixed_2 NDRE_q1_fixed_2 
+RMSE: 31.69043 
+r: 0.7752793 
+
+NDVI_mean_fixed_2 NDVI_median_fixed_2 NDVI_sum_fixed_2 NDVI_q1_fixed_2 NDVI_q3_fixed_2 NDRE_min_fixed_2 NDRE_max_fixed_2 NDRE_sum_fixed_2 NDRE_q1_fixed_2 NDRE_q3_fixed_2 
+RMSE: 31.68898 
+r: 0.778599 
+
+Warning messages:
+1: In checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv,  :
+  Model failed to converge with max|grad| = 0.00389945 (tol = 0.002, component 1)
+2: In checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv,  :
+  Model failed to converge with max|grad| = 0.00317967 (tol = 0.002, component 1)
+3: In checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv,  :
+  Model failed to converge with max|grad| = 0.00263152 (tol = 0.002, component 1)
 overlapping of parent1 and parent2 among 2022 and 2023
 31 overlapping from total of 46 
 22 overlapping from total of 31 
 call full model:
 lmer(formula = yieldPerAcre ~ NDVI_mean_fixed_2 + NDVI_median_fixed_2 + 
-    NDVI_min_fixed_2 + NDVI_sum_fixed_2 + NDRE_mean_fixed_2 + 
-    NDRE_max_fixed_2 + NDRE_sum_fixed_2 + (1 | parent1) + (1 | 
-    parent2), data = full)
+    NDVI_sum_fixed_2 + NDVI_q1_fixed_2 + NDVI_q3_fixed_2 + NDRE_min_fixed_2 + 
+    NDRE_max_fixed_2 + NDRE_sum_fixed_2 + NDRE_q1_fixed_2 + NDRE_q3_fixed_2 + 
+    (1 | parent1) + (1 | parent2), data = full)
 
-                          m_2022 m_2022_2023
-(Intercept)          -268.315886  -293.48900
-NDVI_mean_fixed_2   -2477.823356 -2494.57093
-NDVI_median_fixed_2   875.885148   744.02635
-NDVI_min_fixed_2      168.394907   137.89712
-NDVI_sum_fixed_2        9.323674    10.05888
-NDRE_mean_fixed_2    4633.564005  5137.72655
-NDRE_max_fixed_2     -104.522623  -108.04251
-NDRE_sum_fixed_2      -21.360870   -23.29438
-         Min.  1st Qu.   Median     Mean  3rd Qu.     Max.
-2022  1.67000  82.1100 136.4500 121.9023 162.9350 243.9300
-2023 21.67000  88.0600 107.9400 118.3114 136.8400 278.4600
-sub  11.38676 147.2054 167.9741 162.1511 181.3789 223.8216
+                          m_2022  m_2022_2023
+(Intercept)          -301.450756  -310.306436
+NDVI_mean_fixed_2   -1415.353915 -1726.024267
+NDVI_median_fixed_2   273.276403   285.845819
+NDVI_sum_fixed_2        7.555872     8.798941
+NDVI_q1_fixed_2       154.598087   249.562133
+NDVI_q3_fixed_2       -51.952501  -134.011810
+NDRE_min_fixed_2      174.462253   248.579258
+NDRE_max_fixed_2      -45.531114    -2.672182
+NDRE_sum_fixed_2      -17.768981   -20.662917
+NDRE_q1_fixed_2      1745.326201  1857.915553
+NDRE_q3_fixed_2      1917.036099  2356.466971
+          Min.  1st Qu.   Median     Mean  3rd Qu.     Max.
+2022  1.670000  82.1100 136.4500 121.9023 162.9350 243.9300
+2023 21.670000  88.0600 107.9400 118.3114 136.8400 278.4600
+sub   3.704902 150.0954 170.9675 165.0501 184.7163 223.5308
