@@ -43,7 +43,7 @@ vis <- c(
 fixed_eff <- c(
   # "commercial",
   # "location",
-  "nitrogenTreatment",
+  # "nitrogenTreatment",
   vis
 )
 
