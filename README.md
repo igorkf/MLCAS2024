@@ -11,7 +11,8 @@ https://iastate.box.com/s/p8nj1ukvwx3yo7off8y8yspdruc0mjna
 
 Install Python packages and activate conda environment:
 ```
-conda env create -f environment.yml
+conda create -n mlcas2024 python=3.11
+conda install pandas rasterio tqdm
 conda activate mlcas2024
 ```
 
