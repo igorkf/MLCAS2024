@@ -45,7 +45,7 @@ if __name__ == "__main__":
     if args.data == "test":
         PATH = Path(f"data/test/Test/Test")
     else:
-        PATH = Path(f"data/{args.data}/{args.year}")
+        PATH = Path(f"data/{args.data}/{args.year}/{args.year}")
     files = list(PATH.rglob("*.TIF"))
     if args.debug:
         np.random.seed(42)

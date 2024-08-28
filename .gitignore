@@ -20,6 +20,7 @@ data/**/*.md
 data/**/*.zip
 data/**/*.Rhistory
 data/**/*.ipynb
+__MACOSX
 
 # logs
 logs/*.txt
