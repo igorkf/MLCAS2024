@@ -6,7 +6,7 @@ https://eval.ai/web/challenges/challenge-page/2332/overview
 ## Setup data and environment
 Clone the repository.
 
-Download the data and put it on the `data` folder:   
+Download the data and put it on the `data` folder (unzip folders as needed):   
 https://iastate.box.com/s/p8nj1ukvwx3yo7off8y8yspdruc0mjna
 
 Install Python packages and activate conda environment:

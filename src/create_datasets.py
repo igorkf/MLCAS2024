@@ -28,13 +28,13 @@ def process_raw_vis(df, vis):
     def q3(x):
         return x.quantile(0.75)
 
-    funcs = [mean, median, min, max, sum, q1, q3]
+    funcs = ["mean", "median", "min", "max", "sum", q1, q3]
     group = ["location", "tp", "experiment", "range", "row"]
     for i, vi in enumerate(vis):
         df_stats = df.groupby(group)[vi].agg(funcs).reset_index()
-        df_stats = df_stats.rename(
-            columns={fn.__name__: f"{vi}_{fn.__name__}" for fn in funcs}
-        )
+        df_stats.columns = [
+            f"{vi}_{x}" if x not in group else x for x in df_stats.columns
+        ]
         df_stats_pivot = pivot(df_stats)
         if i == 0:
             df_vis = df_stats_pivot.copy()
