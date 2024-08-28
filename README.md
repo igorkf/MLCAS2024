@@ -10,6 +10,15 @@ Download the data (https://iastate.box.com/s/p8nj1ukvwx3yo7off8y8yspdruc0mjna).
 
 Put the unzipped folders `train`, `validation`, and `test` on the `data` folder.
 
+I realized that depending on your OS, the folders might get unzipped differently.       
+Thus, make sure the data structure (after unzipping the folders) is as follows:
+```
+data/train/2022/...
+data/train/2023/...
+data/validation/2023/...
+data/test/Test/Test/...
+```
+
 Create a conda environment and install Python packages:
 ```
 conda create -n mlcas2024 python=3.11
