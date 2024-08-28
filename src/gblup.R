@@ -72,18 +72,17 @@ cat("VIs:", vis, "\n")
 cat("# VIs:", length(vis), "\n")
 
 # enviromic relationship kinship
-all_data <- bind_rows(train, val, test) 
+all_data <- bind_rows(train, val, test)
 V <- all_data %>%
-  group_by(env_exp) %>% 
-  summarise_at(vars(vis), median) %>% 
-  ungroup() %>% 
+  dplyr::select(img_id, NDVI_mean_fixed_2, NDVI_median_fixed_2, NDVI_min_fixed_2,
+                NDRE_mean_fixed_2, NDRE_max_fixed_2) %>% 
   as.matrix()
 rownames(V) <- V[, 1]
 V <- V[, -1]
 class(V) <- "numeric"
-V <- apply(V, 2, function(x) (x - mean(x)) / sd(x))
+V <- apply(V, 2, function(x) (x - mean(x)))
 K <- tcrossprod(V) / mean(diag(V))
-K <- arc(K)
+# K <- arc(K)
 dim(K)
 # heatmap(K)
 # K_melted <- reshape::melt(W)
@@ -96,16 +95,16 @@ G <- as.matrix(read.table("output/G.txt"))
 colnames(G) <- rownames(G)  # fix colnames
 G1 <- G2 <- G
 
-G1 <- arc(G1)
+# G1 <- arc(G1)
 unknown_p1 <- setdiff(levels(all_data$parent1), rownames(G))
 G1 <- bind_block_diag(G1, unknown_p1)
 
-G2 <- arc(G2)
+# G2 <- arc(G2)
 unknown_p2 <- setdiff(levels(all_data$parent2), rownames(G))
 G2 <- bind_block_diag(G2, unknown_p2)
 
 G1G2 <- as.matrix(read.table("output/G1G2.txt"))
-G1G2 <- arc(G1G2)
+# G1G2 <- arc(G1G2)
 colnames(G1G2) <- rownames(G1G2)  # fix colnames
 unknown_geno <- setdiff(levels(all_data$genotype), rownames(G1G2))
 Ggeno <- as.matrix(Matrix::bdiag(G1G2, diag(length(unknown_geno))))
@@ -150,20 +149,17 @@ with(all_data, table(env, plotLength))  # only Scottsbluff_2022 used 22.5
 
 # mixed models
 # gxe models: https://cran.r-project.org/web/packages/sommer/vignettes/v4.sommer.gxe.pdf
-fixed <- as.formula(yieldPerAcre ~ commercial + NDVI_mean_fixed + NDVI_median_fixed + 
-                    NDVI_sum_fixed + NDRE_mean_fixed + NDRE_median_fixed + NDRE_max_fixed + 
-                    NDRE_sum_fixed)
-# bc <- boxcox(lm(fixed, data = train))
-# lambda <- bc$x[which.max(bc$y)]
+fixed <- as.formula(yieldPerAcre ~ NDVI_mean_fixed_2 + NDVI_median_fixed_2 + NDVI_min_fixed_2 + 
+                    NDVI_sum_fixed_2 + NDRE_mean_fixed_2 + NDRE_max_fixed_2 + NDRE_sum_fixed_2)
 
 # commercial + VIs + genotype
 system.time(
-  mod1 <- mmer(fixed, random = ~ vsr(genotype, Gu = Ggeno), # vsr(parent1, Gu = G1) + vsr(parent2, Gu = G2),
+  mod1 <- mmer(fixed, random = ~ vsr(parent1, Gu = G1) + vsr(parent2, Gu = G2) + vsr(img_id, Gu = K), # , + vsr(genotype, Gu = Ggeno),
                rcov= ~ units, data = train)
 )
 summary(mod1)
 yhat1 <- build_prediction(
-  mod1, fixed, val, "yieldPerAcre", add_p1 = F, add_p2 = F, add_env = F, add_geno = T, verbose = T
+  mod1, fixed, val, "yieldPerAcre", add_p1 = F, add_p2 = F, add_env = T, add_geno = F, verbose = T
 )
 cat("RMSE:", RMSE(val$yieldPerAcre, yhat1), "\n")
 cat("r:", cor(val$yieldPerAcre, yhat1), "\n\n")
