@@ -185,31 +185,28 @@ Warning messages:
   Model failed to converge with max|grad| = 0.00317967 (tol = 0.002, component 1)
 3: In checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv,  :
   Model failed to converge with max|grad| = 0.00263152 (tol = 0.002, component 1)
-RMSE: 31.47238 
-cor: 0.7859207 
 overlapping of parent1 and parent2 among 2022 and 2023
 31 overlapping from total of 46 
 22 overlapping from total of 31 
 call full model:
-glmer(formula = yieldPerAcre ~ NDVI_mean_fixed_2 + NDVI_median_fixed_2 + 
+lmer(formula = yieldPerAcre ~ NDVI_mean_fixed_2 + NDVI_median_fixed_2 + 
     NDVI_sum_fixed_2 + NDVI_q1_fixed_2 + NDVI_q3_fixed_2 + NDRE_min_fixed_2 + 
     NDRE_max_fixed_2 + NDRE_sum_fixed_2 + NDRE_q1_fixed_2 + NDRE_q3_fixed_2 + 
-    (1 | parent1) + (1 | parent2), data = full, family = Gamma(link = "log"), 
-    nAGQ = 0)
+    (1 | parent1) + (1 | parent2), data = full)
 
-                         m_2022  m_2022_2023
-(Intercept)         -1.12744323 -1.182940290
-NDVI_mean_fixed_2   -7.44457893 -5.839629460
-NDVI_median_fixed_2  1.83580628  1.566138468
-NDVI_sum_fixed_2     0.06170700  0.058706167
-NDVI_q1_fixed_2      0.06815709 -0.287048301
-NDVI_q3_fixed_2      0.61242953 -0.005654939
-NDRE_min_fixed_2     1.59764889  1.692640422
-NDRE_max_fixed_2    -0.96594816  1.482592653
-NDRE_sum_fixed_2    -0.14614159 -0.136471525
-NDRE_q1_fixed_2     11.25210613 11.303532927
-NDRE_q3_fixed_2     18.00408001 13.943269645
-         Min.  1st Qu.   Median     Mean  3rd Qu.     Max.
-2022  1.67000  82.1100 136.4500 121.9023 162.9350 243.9300
-2023 21.67000  88.0600 107.9400 118.3114 136.8400 278.4600
-sub  28.02914 186.8275 215.0587 209.4609 237.1719 331.2349
+                          m_2022  m_2022_2023
+(Intercept)          -301.450756  -310.306436
+NDVI_mean_fixed_2   -1415.353915 -1726.024267
+NDVI_median_fixed_2   273.276403   285.845819
+NDVI_sum_fixed_2        7.555872     8.798941
+NDVI_q1_fixed_2       154.598087   249.562133
+NDVI_q3_fixed_2       -51.952501  -134.011810
+NDRE_min_fixed_2      174.462253   248.579258
+NDRE_max_fixed_2      -45.531114    -2.672182
+NDRE_sum_fixed_2      -17.768981   -20.662917
+NDRE_q1_fixed_2      1745.326201  1857.915553
+NDRE_q3_fixed_2      1917.036099  2356.466971
+          Min.  1st Qu.   Median     Mean  3rd Qu.     Max.
+2022  1.670000  82.1100 136.4500 121.9023 162.9350 243.9300
+2023 21.670000  88.0600 107.9400 118.3114 136.8400 278.4600
+sub   3.704902 150.0954 170.9675 165.0501 184.7163 223.5308
