@@ -17,8 +17,7 @@ def calc_stats(name, index):
         f"{name}_median": np.nanpercentile(np.ma.filled(index, np.nan), 0.5),
         f"{name}_min": index.min(),
         f"{name}_max": index.max(),
-        f"{name}_sum": index.sum(),
-        # f"{name}_std": index.std(),
+        f"{name}_sum": index.sum()
     }
     return data
 
@@ -33,7 +32,6 @@ def create_keys(df):
         columns=keys,
     )
     df = pd.concat([df_keys, df], axis=1)
-    # df = df.drop("file", axis=1)
     return df
 
 
@@ -69,20 +67,11 @@ if __name__ == "__main__":
             NDRE = nir_minus_re / (nir + re)
             MTCI = nir_minus_re / (re - r)
             CI = (nir / g) - 1
-            # EVI = (2.5 * nir_minus_r) / (1 + nir + (6 * r) - (7.5 * b))
-            # NGRDI = (r - g) / (g + r)
-            # GNDVI = (nir - g) / (nir + g)
-            # GLI = (2 * g - r - b) / (2 * g + r + b)
-            # SAVI = 1.5 * nir_minus_r / (nir_plus_r + 0.5)
             if args.aggregate:
                 d.update(calc_stats("NDVI", NDVI))
                 d.update(calc_stats("NDRE", NDRE))
                 d.update(calc_stats("MTCI", MTCI))
                 d.update(calc_stats("CI", CI))
-                # d.update(calc_stats("NGRDI", NGRDI))
-                # d.update(calc_stats("GNDVI", GNDVI))
-                # d.update(calc_stats("GLI", GLI))
-                # d.update(calc_stats("SAVI", SAVI))
             else:
                 d["NDVI"] = NDVI[~r.mask].data.ravel()
                 d["NDRE"] = NDRE[~r.mask].data.ravel()

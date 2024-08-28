@@ -31,15 +31,6 @@ def process_raw_vis(df, vis):
     funcs = [mean, median, min, max, sum, q1, q3]
     group = ["location", "tp", "experiment", "range", "row"]
     for i, vi in enumerate(vis):
-        # df_agg = df.groupby(["location", "tp", "experiment"])[vi].agg(["mean", "std"])
-        # df_agg["lb"] = df_agg["mean"] - 3 * df_agg["std"]
-        # df_agg["ub"] = df_agg["mean"] + 3 * df_agg["std"]
-        # df_agg = df_agg.drop(["mean", "std"], axis=1)
-        # df_merged = df.merge(df_agg, on=["location", "tp", "experiment"])
-        # df_merged[f"{vi}_outlier"] = ~df_merged[vi].between(
-        #     df_merged["lb"], df_merged["ub"]
-        # )
-        # df_merged = df_merged[~df_merged[f"{vi}_outlier"]].reset_index(drop=True)
         df_stats = df.groupby(group)[vi].agg(funcs).reset_index()
         df_stats = df_stats.rename(
             columns={fn.__name__: f"{vi}_{fn.__name__}" for fn in funcs}
@@ -87,26 +78,6 @@ if __name__ == "__main__":
     df_test = create_img_id(df_test, DESIGN_COLS)
     df_test["year"] = 2023
 
-    # outliers
-    # def sd(x):
-    #     return x.var() ** 0.5
-    # mean_sd = df_train_2022.groupby(["location", "year"])["yieldPerAcre"].agg(
-    #     ["mean", sd]
-    # )
-    # df_train_2022 = df_train_2022.merge(mean_sd, on=["location", "year"])
-    # df_train_2022["mean_3sd"] = df_train_2022["mean"] + 3 * df_train_2022["sd"]
-    # df_train_2022["outlier"] = ~df_train_2022["yieldPerAcre"].between(
-    #     -df_train_2022["mean_3sd"], df_train_2022["mean_3sd"]
-    # )
-    # print("Dropping outliers:")
-    # print(
-    #     df_train_2022[df_train_2022["outlier"]][
-    #         ["location", "yieldPerAcre", "mean", "sd"]
-    #     ]
-    # )
-    # df_train_2022 = df_train_2022[~df_train_2022["outlier"]].reset_index(drop=True)
-    # print()
-
     # merge satellite data
     if USE_RAW:
         VIS = ["NDVI", "NDRE", "MTCI", "CI"]
@@ -130,33 +101,11 @@ if __name__ == "__main__":
     df_test = df_test.merge(df_test_sat, on=DESIGN_COLS, how="left")
 
     # fix timepoints for each location
-    # the comment is the difference of days between planting date and the chosen TP (i.e. 1, 2, or 3)
+    # the comment is the difference of days between planting date and the TP (i.e. 1, 2, or 3)
     VIS = [
         "_".join(x.split("_")[:2]) for x in df_train_sat_2022 if x not in DESIGN_COLS
     ]
     VIS = [x for x in VIS if "NDVI_max" not in x]  # I guess it has outliers?
-    # VIS = [x for x in VIS if "EVI" not in x]
-    # VIS = [x for x in VIS if "EVI_max" not in x and "EVI_min" not in x and "EVI_median" not in x]
-
-    # first pass
-    # for vi in VIS:
-    #     new_col = f"{vi}_fixed_1"
-
-    #     # train2022
-    #     fix_timepoint(df_train_2022, "Scottsbluff", f"{vi}_TP2", new_col)  # 58
-    #     fix_timepoint(df_train_2022, "Lincoln", f"{vi}_TP1", new_col)  # 56
-    #     fix_timepoint(df_train_2022, "MOValley", f"{vi}_TP1", new_col)  # 74
-    #     fix_timepoint(df_train_2022, "Ames", f"{vi}_TP2", new_col)
-    #     fix_timepoint(df_train_2022, "Crawfordsville", f"{vi}_TP2", new_col)
-
-    #     # train2023
-    #     fix_timepoint(df_2023, "Lincoln", f"{vi}_TP2", new_col)  # 60
-    #     fix_timepoint(df_2023, "MOValley", f"{vi}_TP1", new_col)  # 79
-
-    #     # val2023
-    #     fix_timepoint(df_test, "Ames", f"{vi}_TP1", new_col)  # 46
-
-    # second pass
     for vi in VIS:
         new_col = f"{vi}_fixed_2"
 
@@ -173,24 +122,6 @@ if __name__ == "__main__":
 
         # val2023
         fix_timepoint(df_test, "Ames", f"{vi}_TP2", new_col)  # 72
-
-    # third pass
-    # for vi in VIS:
-    #     new_col = f"{vi}_fixed_3"
-
-    #     # train2022
-    #     fix_timepoint(df_train_2022, "Scottsbluff", f"{vi}_TP4", new_col)
-    #     fix_timepoint(df_train_2022, "Lincoln", f"{vi}_TP3", new_col)
-    #     fix_timepoint(df_train_2022, "MOValley", f"{vi}_TP3", new_col)
-    #     fix_timepoint(df_train_2022, "Ames", f"{vi}_TP4", new_col)
-    #     fix_timepoint(df_train_2022, "Crawfordsville", f"{vi}_TP4", new_col)
-
-    #     # train2023
-    #     fix_timepoint(df_2023, "Lincoln", f"{vi}_TP3", new_col)  # no TP4 available!
-    #     fix_timepoint(df_2023, "MOValley", f"{vi}_TP2", new_col)
-
-    #     # val2023
-    #     fix_timepoint(df_test, "Ames", f"{vi}_TP3", new_col)  # 103
 
     SAT_COLS = df_train_2022.filter(regex="_fixed", axis=1).columns.tolist()
 
