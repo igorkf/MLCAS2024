@@ -10,21 +10,18 @@ train[c("parent1", "parent2")] <- str_split_fixed(train$genotype, " X ", 2)
 train$env <- interaction(train$location, train$year, sep = "_")
 train$C <- train$range
 train$R <- train$row
-# train$commercial <- ifelse(grepl(" X ", train$genotype), "no", "yes")
 
 val <- read.csv("output/val.csv")
 val[c("parent1", "parent2")] <- str_split_fixed(val$genotype, " X ", 2)
 val$env <- interaction(val$location, val$year, sep = "_")
 val$C <- val$range
 val$R <- val$row
-# val$commercial <- ifelse(grepl(" X ", val$genotype), "no", "yes")
 
 test <- read.csv("output/test.csv")
 test[c("parent1", "parent2")] <- str_split_fixed(test$genotype, " X ", 2)
 test$env <- interaction(test$location, test$year, sep = "_")
 test$C <- test$range
 test$R <- test$row
-# test$commercial <- ifelse(grepl(" X ", test$genotype), "no", "yes")
 
 cats <- c("experiment", "img_id", "genotype", "parent1", "parent2", "location", "env", "C", "R", "nitrogenTreatment")
 for (cat in cats) {
@@ -120,73 +117,6 @@ ggplot(tab_res, aes(x = yhat, y = res, color = location)) +
 ggplot(tab_res, aes(x = yieldPerAcre, y = yhat , color = location)) +
   geom_point()
 
-# refit with link function due to negative fitted values
-# mod_best_fam <- glmer(summary(mod_best)$call, family = Gamma(link = "log"), nAGQ = 0, data = train)
-# tab_res <- train %>% 
-#   mutate(yhat = fitted(mod_best_fam)) %>% 
-#   mutate(res = resid(mod_best_fam))
-# ggplot(tab_res, aes(x = yhat, y = res, color = location)) +
-#   geom_point()
-# ggplot(tab_res, aes(x = yieldPerAcre, y = yhat , color = location)) +
-#   geom_point()
-# yhat_glmm <- predict(mod_best_fam, newdata = val, allow.new.levels = T, type = "response")
-# cat("RMSE:", RMSE(val$yieldPerAcre, yhat_glmm), "\n")
-# cat("cor:", cor(val$yieldPerAcre, yhat_glmm), "\n")
-
-# m1 <- lme(
-#   fixed = yieldPerAcre ~ NDVI_mean_fixed_2 + NDVI_median_fixed_2 + NDVI_min_fixed_2 + NDVI_sum_fixed_2 + NDRE_mean_fixed_2 + NDRE_max_fixed_2 + NDRE_sum_fixed_2,
-#   random = ~ 1 | parent1 / parent2,
-#   correlation = corSymm(form = ~ 1 | parent1 / parent2),
-#   data = train
-# )
-# p1 <- predict(m1, newdata = val, level = 0)
-# p2 <- predict(m1, newdata = val)
-# p <- ifelse(is.na(p2), p1, p2)
-# RMSE(val$yieldPerAcre, p)
-# plot(val$yieldPerAcre, p)
-
-# model for BLUEs
-# https://idahoagstats.github.io/guide-to-field-trial-spatial-analysis/rcbd-r.html#rowcolumn-trends
-# library(SpATS)
-# for (loc in levels(train$location)) {
-#   train_sub <- droplevels(train[train$location == loc, ])
-#   if(length(levels(train_sub$experiment)) > 2) {
-#     # blues <- lmer(yieldPerAcre ~ (1 | experiment), data = train_sub)
-#     # train[train$location == loc, "blues"] <- fitted(blues)
-#     rand <- ~ experiment
-#   } else {
-#     # train[train$location == loc, "blues"] <- train_sub$yieldPerAcre
-#     rand <- NULL
-#   }
-#   blues <- SpATS(
-#     response = "yieldPerAcre",
-#     # fixed = ~ NDVI_mean_fixed_2 + NDVI_median_fixed_2 + NDVI_min_fixed_2 +
-#     #           NDVI_sum_fixed_2 + NDRE_mean_fixed_2 + NDRE_median_fixed_2 +
-#     #           NDRE_min_fixed_2 + NDRE_max_fixed_2 + NDRE_sum_fixed_2,
-#     random = rand,
-#     genotype = "genotype",
-#     spatial = ~ PSANOVA(range, row, nseg = c(10, 20), degree = 3, pord = 2),
-#     data = train_sub
-#   )
-#   train[train$location == loc, "blues"] <- blues$fitted
-#   # blues <- lmer(rand, data = train_sub)
-# }
-# mod_best_adj <- update(mod_best, blues ~ ., data = train)
-# mod_best_adj <- SpATS(
-#   response = "yieldPerAcre",
-#   fixed = ~ NDVI_mean_fixed_2 + NDVI_median_fixed_2 + NDVI_min_fixed_2 +
-#             NDVI_sum_fixed_2 + NDRE_mean_fixed_2 + NDRE_median_fixed_2 +
-#             NDRE_min_fixed_2 + NDRE_max_fixed_2 + NDRE_sum_fixed_2,
-#   random = ~ location,
-#   genotype = "genotype",
-#   genotype.as.random = T,
-#   spatial = ~ PSANOVA(range, row, nseg = c(10, 20), degree = 3, pord = 2),
-#   data = train
-# )
-# yhat_mm2 <- predict(mod_best_adj, newdata = val)$predicted.values
-# cat("RMSE:", RMSE(val$yieldPerAcre, yhat_mm2), "\n")
-# cat("r:", cor(val$yieldPerAcre, yhat_mm2), "\n\n")
-
 
 # overlapping between 2022 and 2023
 cat("overlapping of parent1 and parent2 among 2022 and 2023\n")
@@ -222,5 +152,5 @@ tab_sub$yieldPerAcre <- pred
 # compare distributions
 dists <- rbind(summary(train$yieldPerAcre), summary(val$yieldPerAcre), summary(pred))
 rownames(dists) <- c("2022", "2023", "sub")
-dists
+print(dists)
 write.csv(tab_sub, "output/submission.csv",row.names = F)
