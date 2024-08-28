@@ -43,9 +43,9 @@ if __name__ == "__main__":
     parser.add_argument("--debug", action="store_true", default=False)
     args = parser.parse_args()
     if args.data == "test":
-        PATH = Path(f"data/test/Test/Test")
+        PATH = Path(f"data/test/Test")
     else:
-        PATH = Path(f"data/{args.data}/{args.year}/{args.year}")
+        PATH = Path(f"data/{args.data}/{args.year}")
     files = list(PATH.rglob("*.TIF"))
     if args.debug:
         np.random.seed(42)

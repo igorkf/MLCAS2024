@@ -1,3 +1,4 @@
+WARNING: ignoring environment value of R_HOME
 
 Call:
 lm(formula = form, data = train)
@@ -23,7 +24,7 @@ NDRE_sum_fixed_2      -21.4777     1.8041 -11.905  < 2e-16 ***
 NDRE_q1_fixed_2       -78.1064   434.0979  -0.180  0.85723    
 NDRE_q3_fixed_2       -64.0940   478.4554  -0.134  0.89345    
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 Residual standard error: 28.33 on 2117 degrees of freedom
 Multiple R-squared:  0.7333,	Adjusted R-squared:  0.7316 
@@ -68,7 +69,7 @@ NDRE_median_fixed_2   595.4849   337.5229   1.764
 NDRE_min_fixed_2     -132.2107    68.4871  -1.930
 NDRE_max_fixed_2     -186.7364   129.2242  -1.445
 NDRE_sum_fixed_2      -19.9938     1.6821 -11.886
-NDRE_q1_fixed_2      -292.8196   405.9474  -0.721
+NDRE_q1_fixed_2      -292.8197   405.9474  -0.721
 NDRE_q3_fixed_2      -567.6376   447.3267  -1.269
 call full model:
 lmer(formula = yieldPerAcre ~ NDVI_mean_fixed_2 + NDVI_median_fixed_2 + 
@@ -169,7 +170,7 @@ NDVI_mean_fixed_2   -1415.353915 -1726.024267
 NDVI_median_fixed_2   273.276403   285.845819
 NDVI_sum_fixed_2        7.555872     8.798941
 NDVI_q1_fixed_2       154.598087   249.562133
-NDVI_q3_fixed_2       -51.952501  -134.011809
+NDVI_q3_fixed_2       -51.952501  -134.011810
 NDRE_min_fixed_2      174.462253   248.579258
 NDRE_max_fixed_2      -45.531114    -2.672182
 NDRE_sum_fixed_2      -17.768981   -20.662917

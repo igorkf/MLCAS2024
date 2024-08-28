@@ -137,7 +137,7 @@ summary(mod_full)$call
 cat("\n")
                           
 # predict on sub
-tab_sub <- read.csv("data/test/Test/Test/GroundTruth/test_HIPS_HYBRIDS_2023_V2.3.csv")
+tab_sub <- read.csv("data/test/Test/GroundTruth/test_HIPS_HYBRIDS_2023_V2.3.csv")
 stopifnot(all(test$experiment == tab_sub$experiment))
 pred <- predict(mod_full, newdata = test, allow.new.levels = T)  # just one line unknown (ND203)
 
