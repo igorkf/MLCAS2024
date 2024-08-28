@@ -120,6 +120,19 @@ ggplot(tab_res, aes(x = yhat, y = res, color = location)) +
 ggplot(tab_res, aes(x = yieldPerAcre, y = yhat , color = location)) +
   geom_point()
 
+# refit with link function due to negative fitted values
+mod_best_fam <- glmer(summary(mod_best)$call, family = Gamma(link = "log"), nAGQ = 0, data = train)
+tab_res <- train %>% 
+  mutate(yhat = fitted(mod_best_fam)) %>% 
+  mutate(res = resid(mod_best_fam))
+ggplot(tab_res, aes(x = yhat, y = res, color = location)) +
+  geom_point()
+ggplot(tab_res, aes(x = yieldPerAcre, y = yhat , color = location)) +
+  geom_point()
+yhat_glmm <- predict(mod_best_fam, newdata = val, allow.new.levels = T, type = "response")
+cat("RMSE:", RMSE(val$yieldPerAcre, yhat_glmm), "\n")
+cat("cor:", cor(val$yieldPerAcre, yhat_glmm), "\n")
+
 # m1 <- lme(
 #   fixed = yieldPerAcre ~ NDVI_mean_fixed_2 + NDVI_median_fixed_2 + NDVI_min_fixed_2 + NDVI_sum_fixed_2 + NDRE_mean_fixed_2 + NDRE_max_fixed_2 + NDRE_sum_fixed_2,
 #   random = ~ 1 | parent1 / parent2,
@@ -188,7 +201,7 @@ cat(length(inter_p2), "overlapping from total of", length(union_p2), "\n")
 val$yhat_lm <- NULL
 val$yhat_mm <- NULL
 full <- rbind(train, val)
-mod_full <- update(mod_best, data = full)
+mod_full <- update(mod_best_fam, data = full)
 cat("call full model:\n")
 summary(mod_full)$call
 cat("\n")
@@ -196,11 +209,11 @@ cat("\n")
 # predict on sub
 tab_sub <- read.csv("data/test/Test/Test/GroundTruth/test_HIPS_HYBRIDS_2023_V2.3.csv")
 stopifnot(all(test$experiment == tab_sub$experiment))
-pred <- predict(mod_full, newdata = test, allow.new.levels = T)  # just one line unknown (ND203)
+pred <- predict(mod_full, newdata = test, allow.new.levels = T, type = "response")  # just one line unknown (ND203)
 
 # compare estimates
 df_coef <- data.frame(
-  m_2022 = summary(mod_best)$coefficients[, "Estimate"],
+  m_2022 = summary(mod_best_fam)$coefficients[, "Estimate"],
   m_2022_2023 = summary(mod_full)$coefficients[, "Estimate"]
 )
 print(df_coef)
